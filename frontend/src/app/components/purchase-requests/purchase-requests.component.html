@@ -1,0 +1,279 @@
+<!-- Purchase Requests Component HTML -->
+<div class="purchase-requests-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <button class="btn-back" (click)="goBack()" type="button">
+        ← Back
+      </button>
+      <h1>Purchase Requests</h1>
+    </div>
+    <button class="btn btn-primary" (click)="openCreateModal()">
+      + New Purchase Request
+    </button>
+  </div>
+
+  <!-- Error/Success Messages -->
+  <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+  <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <h3>Filters</h3>
+    <div class="filters-grid">
+      <div class="filter-group">
+        <label for="filterStatus">Status</label>
+        <select id="filterStatus" [(ngModel)]="filterStatus">
+          <option value="">All Statuses</option>
+          <option [value]="StatusEnum.DRAFT">Draft</option>
+          <option [value]="StatusEnum.PENDING">Pending</option>
+          <option [value]="StatusEnum.APPROVED">Approved</option>
+          <option [value]="StatusEnum.REJECTED">Rejected</option>
+          <option [value]="StatusEnum.DELIVERED">Delivered</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="filterProject">Project</label>
+        <select id="filterProject" [(ngModel)]="filterProjectId">
+          <option [ngValue]="null">All Projects</option>
+          <option *ngFor="let project of projects" [ngValue]="project.id">
+            {{ project.name }}
+          </option>
+        </select>
+      </div>
+
+      <div></div>
+
+      <div class="filter-group">
+        <button class="btn btn-primary" (click)="applyFilters()">Apply Filters</button>
+      </div>
+
+      <div class="filter-group">
+        <button class="btn btn-secondary" (click)="clearFilters()">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading && purchaseRequests.length === 0" class="loading">
+    Loading purchase requests...
+  </div>
+
+  <!-- Purchase Requests Table -->
+  <div *ngIf="!loading || purchaseRequests.length > 0">
+    <table class="requests-table" *ngIf="purchaseRequests.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Item Name</th>
+          <th>Project</th>
+          <th>Qty</th>
+          <th>Unit Price</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Requested By</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let request of purchaseRequests">
+          <td>{{ request.id }}</td>
+          <td><strong>{{ request.itemName }}</strong></td>
+          <td>{{ request.project?.name || 'N/A' }}</td>
+          <td>{{ request.quantity }}</td>
+          <td>{{ formatCurrency(request.estimatedPrice) }}</td>
+          <td>{{ formatCurrency(request.totalPrice) }}</td>
+          <td>
+            <span class="status-badge" 
+                  [ngClass]="'status-' + getStatusColor(request.status)">
+              {{ getStatusLabel(request.status) }}
+            </span>
+          </td>
+          <td>{{ request.requester?.firstName }} {{ request.requester?.lastName }}</td>
+          <td>{{ formatDate(request.createdAt) }}</td>
+          <td>
+            <div class="actions-cell">
+              <!-- Submit (DRAFT → PENDING) -->
+              <button *ngIf="canSubmit(request)" 
+                      class="btn btn-info" 
+                      (click)="submitForApproval(request.id)">
+                Submit
+              </button>
+
+              <!-- Approve (Admin only, PENDING → APPROVED) -->
+              <button *ngIf="canApprove(request)" 
+                      class="btn btn-success" 
+                      (click)="approveRequest(request.id)">
+                Approve
+              </button>
+
+              <!-- Reject (Admin only, PENDING → REJECTED) -->
+              <button *ngIf="canReject(request)" 
+                      class="btn btn-danger" 
+                      (click)="openRejectModal(request.id)">
+                Reject
+              </button>
+
+              <!-- Mark Delivered (Admin only, APPROVED → DELIVERED) -->
+              <button *ngIf="canDeliver(request)" 
+                      class="btn btn-info" 
+                      (click)="markAsDelivered(request.id)">
+                Deliver
+              </button>
+
+              <!-- Delete (Admin only) -->
+              <button *ngIf="canDelete(request)" 
+                      class="btn btn-warning" 
+                      (click)="deleteRequest(request.id)">
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- No Requests Message -->
+    <div *ngIf="purchaseRequests.length === 0 && !loading" class="no-requests">
+      <p>No purchase requests found. Click "New Purchase Request" to create one.</p>
+    </div>
+  </div>
+
+  <!-- Create Purchase Request Modal -->
+  <div *ngIf="showCreateModal" class="modal-overlay" (click)="closeCreateModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Create New Purchase Request</h2>
+        <button class="close-button" (click)="closeCreateModal()">&times;</button>
+      </div>
+
+      <form (ngSubmit)="createPurchaseRequest()">
+        <!-- Item Name -->
+        <div class="form-group">
+          <label for="itemName" class="required">Item Name</label>
+          <input
+            type="text"
+            id="itemName"
+            [(ngModel)]="newRequest.itemName"
+            name="itemName"
+            placeholder="Enter item name"
+            required
+          />
+        </div>
+
+        <!-- Project -->
+        <div class="form-group">
+          <label for="projectId" class="required">Project</label>
+          <select
+            id="projectId"
+            [(ngModel)]="newRequest.projectId"
+            name="projectId"
+            required
+          >
+            <option [ngValue]="null">Select a project</option>
+            <option *ngFor="let project of projects" [ngValue]="project.id">
+              {{ project.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Quantity and Price -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="quantity" class="required">Quantity</label>
+            <input
+              type="number"
+              id="quantity"
+              [(ngModel)]="newRequest.quantity"
+              name="quantity"
+              min="1"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="estimatedPrice" class="required">Unit Price (USD)</label>
+            <input
+              type="number"
+              id="estimatedPrice"
+              [(ngModel)]="newRequest.estimatedPrice"
+              name="estimatedPrice"
+              min="0"
+              step="0.01"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Total Price Display -->
+        <div class="total-price">
+          Total: {{ formatCurrency(newRequest.quantity * newRequest.estimatedPrice) }}
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            [(ngModel)]="newRequest.description"
+            name="description"
+            placeholder="Enter item description and purpose"
+          ></textarea>
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group">
+          <label for="notes">Notes</label>
+          <textarea
+            id="notes"
+            [(ngModel)]="newRequest.notes"
+            name="notes"
+            placeholder="Additional notes (optional)"
+          ></textarea>
+        </div>
+
+        <!-- Error Message in Modal -->
+        <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+        <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeCreateModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">
+            {{ loading ? 'Creating...' : 'Create Request' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Reject Modal -->
+  <div *ngIf="showRejectModal" class="modal-overlay" (click)="closeRejectModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Reject Purchase Request</h2>
+        <button class="close-button" (click)="closeRejectModal()">&times;</button>
+      </div>
+
+      <div class="form-group">
+        <label for="rejectionReason">Rejection Reason</label>
+        <textarea
+          id="rejectionReason"
+          [(ngModel)]="rejectionReason"
+          name="rejectionReason"
+          placeholder="Enter reason for rejection (optional)"
+          rows="4"
+        ></textarea>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeRejectModal()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="rejectRequest()">
+          Confirm Rejection
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

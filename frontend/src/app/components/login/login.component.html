@@ -1,0 +1,74 @@
+<!-- Login Component Template -->
+<div class="login-container">
+  <div class="login-card card">
+    <!-- Back to Welcome Button -->
+    <button class="btn-back" routerLink="/welcome" type="button">
+      ← Back to Home
+    </button>
+    
+    <h1>Lab Platform Login</h1>
+    <p class="subtitle">Sign in to access your laboratory account</p>
+
+    <!-- Error Alert -->
+    <div *ngIf="errorMessage" class="alert alert-error">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Login Form -->
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+      
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="form-control"
+          [(ngModel)]="credentials.email"
+          placeholder="Enter your email"
+          required
+          email
+          [disabled]="loading"
+        />
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          class="form-control"
+          [(ngModel)]="credentials.password"
+          placeholder="Enter your password"
+          required
+          [disabled]="loading"
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="btn btn-primary btn-block"
+        [disabled]="loading || !loginForm.form.valid"
+      >
+        <span *ngIf="!loading">Sign In</span>
+        <span *ngIf="loading">Signing in...</span>
+      </button>
+      
+      <!-- Register Link -->
+      <div class="footer-note">
+        <p>Don't have an account? <a routerLink="/register">Register here</a></p>
+      </div>
+    </form>
+
+    <!-- Test Credentials Info -->
+    <div class="test-credentials">
+      <p><strong>Default Admin Credentials:</strong></p>
+      <p>Email: admin&#64;lab.com</p>
+      <p>Password: admin123</p>
+    </div>
+  </div>
+</div>

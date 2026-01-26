@@ -1,0 +1,177 @@
+<div class="public-articles-container">
+  <!-- Page Header -->
+   <button class="btn-back" (click)="goBack()" type="button">
+        ← Back
+      </button>
+  <div class="page-header">
+    <h1 class="page-title">Scientific Publications</h1>
+    <p class="page-subtitle">Discover our laboratory's research contributions</p>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <div class="filter-row">
+      <div class="filter-group">
+        <label for="searchInput">Search:</label>
+        <input 
+          type="text" 
+          id="searchInput"
+          [(ngModel)]="searchText" 
+          placeholder="Search by title, keywords, or authors..."
+          (keyup.enter)="applyFilters()"
+          class="search-input">
+      </div>
+
+      <div class="filter-group">
+        <label for="yearSelect">Year:</label>
+        <select id="yearSelect" [(ngModel)]="selectedYear" class="filter-select">
+          <option [ngValue]="null">All Years</option>
+          <option *ngFor="let year of availableYears" [ngValue]="year">{{ year }}</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="teamSelect">Research Team:</label>
+        <select id="teamSelect" [(ngModel)]="selectedTeam" class="filter-select">
+          <option [ngValue]="null">All Teams</option>
+          <option *ngFor="let team of teams" [ngValue]="team.id">{{ team.name }}</option>
+        </select>
+      </div>
+
+      <div class="filter-actions">
+        <button (click)="applyFilters()" class="btn btn-primary">
+          <i class="fas fa-filter"></i> Apply Filters
+        </button>
+        <button (click)="resetFilters()" class="btn btn-secondary">
+          <i class="fas fa-redo"></i> Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading articles...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="alert alert-danger">
+    <i class="fas fa-exclamation-triangle"></i> {{ error }}
+  </div>
+
+  <!-- Articles Grid -->
+  <div *ngIf="!loading && !error" class="articles-grid">
+    <!-- No Results -->
+    <div *ngIf="articles.length === 0" class="no-results">
+      <i class="fas fa-search"></i>
+      <h3>No articles found</h3>
+      <p>Try adjusting your filters or search terms.</p>
+    </div>
+
+    <!-- Article Cards -->
+    <div *ngFor="let article of articles" class="article-card">
+      <div class="card-header">
+        <h3 class="article-title" (click)="viewArticleDetail(article.id)">
+          {{ article.title }}
+        </h3>
+        <span class="publication-year">{{ getYear(article.publicationDate) }}</span>
+      </div>
+
+      <div class="card-body">
+        <div class="article-meta">
+          <div class="meta-item">
+            <i class="fas fa-users"></i>
+            <span>{{ formatAuthors(article.authors) }}</span>
+          </div>
+
+          <div class="meta-item" *ngIf="article.journal">
+            <i class="fas fa-book"></i>
+            <span>{{ article.journal }}</span>
+          </div>
+
+          <div class="meta-item" *ngIf="article.team">
+            <i class="fas fa-flask"></i>
+            <span>{{ article.team.name }}</span>
+          </div>
+        </div>
+
+        <div class="article-abstract" *ngIf="article.abstract">
+          {{ article.abstract.substring(0, 200) }}{{ article.abstract.length > 200 ? '...' : '' }}
+        </div>
+
+        <div class="article-keywords" *ngIf="article.keywords">
+          <i class="fas fa-tags"></i>
+          <span class="keywords-text">{{ article.keywords }}</span>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <button (click)="viewArticleDetail(article.id)" class="btn btn-sm btn-outline">
+          <i class="fas fa-info-circle"></i> View Details
+        </button>
+
+        <button 
+          *ngIf="article.doi" 
+          (click)="openDoi(article.doi)" 
+          class="btn btn-sm btn-outline">
+          <i class="fas fa-external-link-alt"></i> DOI
+        </button>
+
+        <button 
+          *ngIf="article.pdfUrl" 
+          (click)="openPdf(article.pdfUrl)" 
+          class="btn btn-sm btn-primary">
+          <i class="fas fa-file-pdf"></i> View PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="!loading && !error && articles.length > 0" class="pagination-container">
+    <div class="pagination-info">
+      Showing {{ (currentPage - 1) * articlesPerPage + 1 }} - 
+      {{ Math.min(currentPage * articlesPerPage, totalArticles) }} 
+      of {{ totalArticles }} articles
+    </div>
+
+    <div class="pagination-controls">
+      <button 
+        (click)="goToPage(1)" 
+        [disabled]="currentPage === 1"
+        class="btn btn-sm btn-outline">
+        <i class="fas fa-angle-double-left"></i>
+      </button>
+
+      <button 
+        (click)="goToPage(currentPage - 1)" 
+        [disabled]="currentPage === 1"
+        class="btn btn-sm btn-outline">
+        <i class="fas fa-angle-left"></i> Prev
+      </button>
+
+      <button 
+        *ngFor="let page of getPageNumbers()"
+        (click)="goToPage(page)"
+        [class.active]="page === currentPage"
+        class="btn btn-sm btn-page">
+        {{ page }}
+      </button>
+
+      <button 
+        (click)="goToPage(currentPage + 1)" 
+        [disabled]="currentPage === totalPages"
+        class="btn btn-sm btn-outline">
+        Next <i class="fas fa-angle-right"></i>
+      </button>
+
+      <button 
+        (click)="goToPage(totalPages)" 
+        [disabled]="currentPage === totalPages"
+        class="btn btn-sm btn-outline">
+        <i class="fas fa-angle-double-right"></i>
+      </button>
+    </div>
+  </div>
+</div>

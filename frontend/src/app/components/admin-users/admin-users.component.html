@@ -1,0 +1,168 @@
+<!-- Admin Users Management Page -->
+<div class="users-container">
+  <div class="page-header">
+    <div class="header-left">
+      <button class="btn-back" routerLink="/dashboard" type="button">
+        ← Back
+      </button>
+      <div>
+        <h1>Users Management</h1>
+        <p>Approve, reject, and manage user accounts</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success/Error Messages -->
+  <div class="alert alert-success" *ngIf="successMessage">
+    {{ successMessage }}
+  </div>
+  <div class="alert alert-error" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Filters and Search -->
+  <div class="filters-row">
+    <div class="filter-group">
+      <label for="statusFilter">Filter by Status:</label>
+      <select id="statusFilter" [(ngModel)]="filterStatus" (change)="onFilterChange()">
+        <option value="all">All Users</option>
+        <option value="PENDING">Pending</option>
+        <option value="APPROVED">Approved</option>
+        <option value="REJECTED">Rejected</option>
+        <option value="DISABLED">Disabled</option>
+      </select>
+    </div>
+
+    <div class="search-group">
+      <input
+        type="text"
+        placeholder="Search by name or email..."
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
+      />
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading" *ngIf="isLoading">
+    Loading users...
+  </div>
+
+  <!-- Users Table -->
+  <div class="table-container" *ngIf="!isLoading">
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>National ID</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Approved By</th>
+          <th>Registered At</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of filteredUsers">
+          <td>{{ user.firstName }} {{ user.lastName }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.nationalId }}</td>
+          <td>
+            <span class="role-badge">{{ getRoleDisplay(user.role) }}</span>
+          </td>
+          <td>
+            <span class="status-badge" [ngClass]="getStatusClass(user.status)">
+              {{ user.status }}
+            </span>
+          </td>
+          <td>
+            <span *ngIf="user.approver">
+              {{ user.approver.firstName }} {{ user.approver.lastName }}
+            </span>
+            <span *ngIf="!user.approver" class="text-muted">—</span>
+          </td>
+          <td>{{ user.createdAt | date:'short' }}</td>
+          <td>
+            <div class="action-buttons">
+              <!-- PENDING user actions -->
+              <ng-container *ngIf="user.status === 'PENDING'">
+                <button class="btn btn-sm btn-success" (click)="approveUser(user.id)" title="Approve">
+                  ✓ Approve
+                </button>
+                <button class="btn btn-sm btn-danger" (click)="openRejectModal(user.id)" title="Reject">
+                  ✗ Reject
+                </button>
+              </ng-container>
+
+              <!-- APPROVED user actions -->
+              <ng-container *ngIf="user.status === 'APPROVED'">
+                <button class="btn btn-sm btn-warning" (click)="disableUser(user.id)" title="Disable">
+                  🔒 Disable
+                </button>
+                <button class="btn btn-sm btn-info" (click)="openPromoteModal(user.id, user.role)" title="Change Role">
+                  ⬆ Change Role
+                </button>
+              </ng-container>
+
+              <!-- REJECTED user actions -->
+              <ng-container *ngIf="user.status === 'REJECTED'">
+                <button class="btn btn-sm btn-success" (click)="approveUser(user.id)" title="Re-approve">
+                  ✓ Re-approve
+                </button>
+                <small class="rejection-reason" *ngIf="user.rejectionReason">
+                  Reason: {{ user.rejectionReason }}
+                </small>
+              </ng-container>
+
+              <!-- DISABLED user actions -->
+              <ng-container *ngIf="user.status === 'DISABLED'">
+                <button class="btn btn-sm btn-success" (click)="enableUser(user.id)" title="Re-enable">
+                  🔓 Re-enable
+                </button>
+              </ng-container>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- No Users Message -->
+    <div class="no-data" *ngIf="filteredUsers.length === 0">
+      No users found matching your filters
+    </div>
+  </div>
+</div>
+
+<!-- Reject Modal -->
+<div class="modal-overlay" *ngIf="showRejectModal" (click)="showRejectModal = false">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Reject User</h2>
+    <p>Please provide a reason for rejection:</p>
+    <textarea
+      [(ngModel)]="rejectionReason"
+      placeholder="Enter rejection reason..."
+      rows="4"
+    ></textarea>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" (click)="showRejectModal = false">Cancel</button>
+      <button class="btn btn-danger" (click)="confirmReject()">Confirm Rejection</button>
+    </div>
+  </div>
+</div>
+
+<!-- Promote Modal -->
+<div class="modal-overlay" *ngIf="showPromoteModal" (click)="showPromoteModal = false">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Change User Role</h2>
+    <p>Select new role:</p>
+    <select [(ngModel)]="newRole">
+      <option value="member">Lab Member</option>
+      <option value="admin">Lab Head (Admin)</option>
+    </select>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" (click)="showPromoteModal = false">Cancel</button>
+      <button class="btn btn-primary" (click)="confirmPromote()">Confirm</button>
+    </div>
+  </div>
+</div>

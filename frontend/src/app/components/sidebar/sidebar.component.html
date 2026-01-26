@@ -1,0 +1,94 @@
+<!-- Bouton Hamburger pour ouvrir/fermer le menu -->
+<button class="hamburger-btn" (click)="toggleMenu()" [class.active]="isMenuOpen">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+<!-- Overlay pour fermer le menu en cliquant à l'extérieur -->
+<div class="sidebar-overlay" *ngIf="isMenuOpen" (click)="closeMenu()"></div>
+
+<aside class="sidebar" [class.open]="isMenuOpen">
+  <!-- Logo -->
+  <div class="sidebar-header" routerLink="/home" (click)="closeMenu()">
+    <img src="assets/images/logo-lr02.jpg" alt="Logo CNSTN" class="sidebar-logo">
+    <h3 class="sidebar-title">LR16CNSTN02</h3>
+  </div>
+
+  <!-- Navigation Menu -->
+  <nav class="sidebar-nav">
+    <!-- Liens publics (toujours visibles) -->
+    <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidebar-link" (click)="closeMenu()">
+      <i class="icon">🏠</i>
+      <span>Accueil</span>
+    </a>
+    
+    <a routerLink="/about" routerLinkActive="active" class="sidebar-link" (click)="closeMenu()">
+      <i class="icon">ℹ️</i>
+      <span>À propos</span>
+    </a>
+    
+    <a routerLink="/contact" routerLinkActive="active" class="sidebar-link" (click)="closeMenu()">
+      <i class="icon">📧</i>
+      <span>Contact</span>
+    </a>
+
+    <a routerLink="/articles" routerLinkActive="active" class="sidebar-link" (click)="closeMenu()">
+      <i class="icon">📚</i>
+      <span>Articles publics</span>
+    </a>
+
+    <!-- Séparateur -->
+    <div class="sidebar-divider" *ngIf="isLoggedIn"></div>
+
+    <!-- Liens privés (utilisateurs connectés) -->
+    <ng-container *ngIf="isLoggedIn">
+      <a routerLink="/dashboard" routerLinkActive="active" class="sidebar-link" (click)="closeMenu()">
+        <i class="icon">📊</i>
+        <span>Tableau de bord</span>
+      </a>
+      
+      <a routerLink="/projects" routerLinkActive="active" class="sidebar-link" (click)="closeMenu()">
+        <i class="icon">📁</i>
+        <span>Projets</span>
+      </a>
+      
+      <a routerLink="/purchase-requests" routerLinkActive="active" class="sidebar-link" (click)="closeMenu()">
+        <i class="icon">🛒</i>
+        <span>Demandes d'achat</span>
+      </a>
+
+      <a routerLink="/dashboard/articles" routerLinkActive="active" class="sidebar-link" (click)="closeMenu()">
+        <i class="icon">📝</i>
+        <span>Gestion articles</span>
+      </a>
+
+      <a routerLink="/admin/users" routerLinkActive="active" class="sidebar-link" *ngIf="isAdmin" (click)="closeMenu()">
+        <i class="icon">👥</i>
+        <span>Utilisateurs</span>
+      </a>
+    </ng-container>
+  </nav>
+
+  <!-- User Info / Login Button -->
+  <div class="sidebar-footer">
+    <ng-container *ngIf="!isLoggedIn">
+      <a routerLink="/welcome" class="sidebar-link login-btn" (click)="closeMenu()">
+        <i class="icon">🔐</i>
+        <span>Espace interne</span>
+      </a>
+    </ng-container>
+
+    <ng-container *ngIf="isLoggedIn">
+      <div class="user-info">
+        <div class="user-avatar">👤</div>
+        <div class="user-details">
+          <div class="user-name">{{ username }}</div>
+          <button class="logout-btn" (click)="logout()">
+            <i class="icon">🚪</i> Déconnexion
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</aside>

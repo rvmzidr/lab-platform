@@ -1,0 +1,132 @@
+<div class="about-container">
+  <!-- LOADING STATE -->
+   <button class="btn-back" (click)="goBack()" type="button">
+        ← Back
+      </button>
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p style="margin-top: 20px; font-size: 1.1rem; color: #6B7280;">Chargement des informations...</p>
+  </div>
+
+  <!-- ERROR STATE -->
+  <div *ngIf="error && !loading" class="error-container">
+    <p class="error-text">{{ error }}</p>
+    <button class="btn-primary" (click)="loadData()" style="margin-top: 20px;">Réessayer</button>
+  </div>
+
+  <!-- CONTENT -->
+  <div *ngIf="labInfo && !loading">
+    <!-- ===== HEADER ===== -->
+    <section class="about-header">
+      <div class="header-image-container">
+        <img src="assets/images/iameges de cnstn.jpg" alt="CNSTN" class="header-bg-image">
+        <div class="header-overlay"></div>
+      </div>
+      <div class="header-content">
+        <h1 class="header-title">{{ labInfo.fullName }}</h1>
+        <p class="header-subtitle">📍 {{ labInfo.address }}</p>
+      </div>
+    </section>
+
+    <!-- ===== CONTENT SECTIONS ===== -->
+    <div class="about-content">
+      
+      <!-- Présentation Générale -->
+      <div class="content-section">
+        <h2 class="section-title">Présentation Générale du Laboratoire</h2>
+        <p class="section-text">{{ labInfo.presentation }}</p>
+      </div>
+
+      <!-- Contexte et Problématique -->
+      <div class="content-section" *ngIf="labInfo.context">
+        <h2 class="section-title">Contexte et Problématique</h2>
+        <p class="section-text">{{ labInfo.context }}</p>
+      </div>
+
+      <!-- Organisation Scientifique - Les 4 Équipes -->
+      <div class="teams-section">
+        <h2 class="section-title">Organisation Scientifique</h2>
+        <p class="section-text">
+          Le laboratoire {{ labInfo.shortName }} est organisé en 4 équipes de recherche spécialisées, 
+          chacune dotée d'expertises complémentaires dans le domaine de l'énergie nucléaire et des matériaux.
+        </p>
+
+        <div class="teams-grid">
+          <div *ngFor="let team of teams" class="team-card">
+            <div class="team-number">0{{ team.order }}</div>
+            
+            <h3 class="team-name">{{ team.name }}</h3>
+
+            <div class="team-subsection">
+              <h4 class="subsection-title">Description</h4>
+              <p class="subsection-content">{{ team.description }}</p>
+            </div>
+
+            <div class="team-subsection" *ngIf="team.expertise">
+              <h4 class="subsection-title">Expertises</h4>
+              <p class="subsection-content">{{ team.expertise }}</p>
+            </div>
+
+            <div class="team-subsection" *ngIf="team.objectives">
+              <h4 class="subsection-title">Objectifs</h4>
+              <p class="subsection-content">{{ team.objectives }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Objectifs du Projet -->
+      <div class="objectives-list" *ngIf="labInfo.objectives">
+        <h2 class="section-title">Objectifs du Laboratoire</h2>
+        <p class="section-text">{{ labInfo.objectives }}</p>
+        
+        <ul>
+          <li>Développer la recherche fondamentale et appliquée dans le domaine de l'énergie nucléaire</li>
+          <li>Contribuer au développement des applications pacifiques du nucléaire en Tunisie</li>
+          <li>Former des chercheurs et des ingénieurs hautement qualifiés</li>
+          <li>Renforcer la coopération scientifique nationale et internationale</li>
+          <li>Assurer le transfert de technologie vers le secteur industriel</li>
+          <li>Promouvoir la culture de la sûreté et de la radioprotection</li>
+        </ul>
+      </div>
+
+      <!-- Timeline -->
+      <div class="timeline">
+        <h2 class="section-title">Évolution du Laboratoire</h2>
+        
+        <div class="timeline-item">
+          <div class="timeline-year">2004</div>
+          <div class="timeline-content">
+            <h4 class="timeline-title">Création de l'UR04CNSTN02</h4>
+            <p class="timeline-description">
+              Unité de recherche "Maîtrise et développement des techniques nucléaires pour la protection 
+              de l'homme et de son environnement"
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-year">{{ labInfo.createdYear }}</div>
+          <div class="timeline-content">
+            <h4 class="timeline-title">Création du {{ labInfo.shortName }}</h4>
+            <p class="timeline-description">
+              Transformation en Laboratoire de Recherche avec un renforcement des équipes et des moyens
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-year">Aujourd'hui</div>
+          <div class="timeline-content">
+            <h4 class="timeline-title">Laboratoire Moderne et Innovant</h4>
+            <p class="timeline-description">
+              4 équipes de recherche actives, collaborations internationales, projets de recherche 
+              d'envergure et formation de la nouvelle génération de chercheurs
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

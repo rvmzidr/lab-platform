@@ -1,0 +1,142 @@
+/* =========================================
+   LOGIN — THEME LABORATOIRE PRO
+   ========================================= */
+
+:root {
+  --lab-primary: #0ea5a4;
+  --lab-primary-2: #2dd4bf;
+  --lab-accent: #38bdf8;
+  --lab-ink: #0b1f2a;
+  --lab-muted: #5b6b79;
+  --lab-bg: #f6f9fb;
+  --lab-surface: #ffffff;
+  --lab-surface-2: #f2f7f9;
+  --lab-border: rgba(11,31,42,.12);
+  --lab-border-strong: rgba(11,31,42,.18);
+  --shadow-sm: 0 6px 18px rgba(11,31,42,.08);
+  --shadow-md: 0 14px 30px rgba(11,31,42,.12);
+  --r-lg: 16px;
+  --r-md: 12px;
+  --r-sm: 10px;
+  --focus: 0 0 0 4px rgba(56,189,248,.22);
+}
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(1200px 400px at 50% 0%, rgba(45,212,191,.14) 0%, transparent 60%),
+    radial-gradient(1200px 400px at 50% 100%, rgba(56,189,248,.12) 0%, transparent 60%),
+    linear-gradient(180deg, var(--lab-bg) 0%, var(--lab-surface-2) 100%);
+  padding: 2rem;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.btn-back {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  background: var(--lab-surface);
+  border: 1px solid var(--lab-border-strong);
+  color: var(--lab-primary);
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 0.85rem;
+  transition: all .18s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-back:hover {
+  background: var(--lab-primary);
+  color: white;
+  transform: translateX(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 2.75rem;
+  box-shadow: var(--shadow-md);
+  border-radius: var(--r-lg);
+  position: relative;
+  background: var(--lab-surface);
+  border: 1px solid var(--lab-border);
+}
+
+.login-card h1 {
+  text-align: center;
+  color: var(--lab-ink);
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.btn-block {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.footer-note {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.footer-note p {
+  color: #666;
+  font-size: 14px;
+  margin: 0;
+}
+
+.footer-note a {
+  color: #1e3c72;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.footer-note a:hover {
+  color: #2a5298;
+  text-decoration: underline;
+}
+
+.test-credentials {
+  margin-top: 30px;
+  padding: 18px;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border-left: 4px solid #2196F3;
+  border-radius: 8px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.test-credentials p {
+  margin: 5px 0;
+  color: #1565c0;
+  font-weight: 500;
+}
+
+.test-credentials strong {
+  color: #0d47a1;
+  font-size: 14px;
+}

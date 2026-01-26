@@ -1,0 +1,162 @@
+/* =========================================
+   WELCOME — THEME LABORATOIRE PRO
+   ========================================= */
+
+:root {
+  --lab-primary: #0ea5a4;
+  --lab-primary-2: #2dd4bf;
+  --lab-accent: #38bdf8;
+  --lab-ink: #0b1f2a;
+  --lab-muted: #5b6b79;
+  --lab-bg: #f6f9fb;
+  --lab-surface: #ffffff;
+  --lab-surface-2: #f2f7f9;
+  --lab-border: rgba(11,31,42,.12);
+  --lab-border-strong: rgba(11,31,42,.18);
+  --shadow-sm: 0 6px 18px rgba(11,31,42,.08);
+  --shadow-md: 0 14px 30px rgba(11,31,42,.12);
+  --r-lg: 16px;
+  --r-md: 12px;
+  --r-sm: 10px;
+  --focus: 0 0 0 4px rgba(56,189,248,.22);
+}
+
+.welcome-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, rgba(14,165,164,.95) 0%, rgba(56,189,248,.75) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2.5rem 1.25rem;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+  color: white;
+}
+
+.header h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+  letter-spacing: -0.8px;
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  opacity: 0.95;
+  font-weight: 500;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 400px));
+  gap: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.access-card {
+  background: var(--lab-surface);
+  border-radius: var(--r-lg);
+  padding: 3rem 2.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all .18s ease;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--lab-border);
+}
+
+.access-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(11,31,42,.20);
+  border-color: rgba(14,165,164,.25);
+}
+
+.card-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.25rem;
+  background: linear-gradient(135deg, rgba(14,165,164,.95), rgba(56,189,248,.70));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(14,165,164,.25);
+}
+
+.card-icon svg {
+  width: 40px;
+  height: 40px;
+  color: white;
+}
+
+.access-card h2 {
+  font-size: 1.8rem;
+  color: var(--lab-ink);
+  margin-bottom: 0.75rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.access-card p {
+  color: var(--lab-muted);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.card-button {
+  background: linear-gradient(135deg, rgba(14,165,164,.95), rgba(56,189,248,.70));
+  color: white;
+  border: 1px solid rgba(255,255,255,.12);
+  padding: 0.85rem 2.5rem;
+  font-size: 1rem;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  font-weight: 800;
+  transition: all .18s ease;
+  box-shadow: 0 10px 20px rgba(14,165,164,.16);
+  letter-spacing: 0.01em;
+}
+
+.card-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 26px rgba(14,165,164,.25);
+}
+
+.footer {
+  margin-top: 60px;
+  text-align: center;
+  color: white;
+  opacity: 0.8;
+}
+
+.footer p {
+  font-size: 0.95rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .access-card {
+    padding: 40px 30px;
+  }
+}

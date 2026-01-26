@@ -1,0 +1,181 @@
+<!-- Projects Component HTML -->
+<div class="projects-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <button class="btn-back" (click)="goBack()" type="button">
+        ← Back
+      </button>
+      <h1>Projects</h1>
+    </div>
+    <button *ngIf="isAdmin" class="btn-primary" (click)="openCreateModal()">
+      + New Project
+    </button>
+  </div>
+
+  <!-- Error/Success Messages -->
+  <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+  <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading && projects.length === 0" class="loading">
+    Loading projects...
+  </div>
+
+  <!-- Projects Table -->
+  <div *ngIf="!loading || projects.length > 0">
+    <table class="projects-table" *ngIf="projects.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Source</th>
+          <th>Institution</th>
+          <th>Budget</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Status</th>
+          <th *ngIf="isAdmin">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let project of projects">
+          <td>{{ project.id }}</td>
+          <td><strong>{{ project.name }}</strong></td>
+          <td>{{ project.source }}</td>
+          <td>{{ project.institution?.name || 'N/A' }}</td>
+          <td>{{ formatCurrency(project.budget) }}</td>
+          <td>{{ formatDate(project.startDate) }}</td>
+          <td>{{ formatDate(project.endDate) }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="project.isActive ? 'status-active' : 'status-inactive'">
+              {{ project.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td *ngIf="isAdmin">
+            <button class="btn-danger" (click)="deleteProject(project.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- No Projects Message -->
+    <div *ngIf="projects.length === 0 && !loading" class="no-projects">
+      <p>No projects found. {{ isAdmin ? 'Click "New Project" to create one.' : '' }}</p>
+    </div>
+  </div>
+
+  <!-- Create Project Modal -->
+  <div *ngIf="showCreateModal" class="modal-overlay" (click)="closeCreateModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Create New Project</h2>
+        <button class="close-button" (click)="closeCreateModal()">&times;</button>
+      </div>
+
+      <form (ngSubmit)="createProject()">
+        <!-- Project Name -->
+        <div class="form-group">
+          <label for="name" class="required">Project Name</label>
+          <input
+            type="text"
+            id="name"
+            [(ngModel)]="newProject.name"
+            name="name"
+            placeholder="Enter project name"
+            required
+          />
+        </div>
+
+        <!-- Source -->
+        <div class="form-group">
+          <label for="source" class="required">Funding Source</label>
+          <input
+            type="text"
+            id="source"
+            [(ngModel)]="newProject.source"
+            name="source"
+            placeholder="Enter funding source"
+            required
+          />
+        </div>
+
+        <!-- Institution -->
+        <div class="form-group">
+          <label for="institutionId" class="required">Institution</label>
+          <select
+            id="institutionId"
+            [(ngModel)]="newProject.institutionId"
+            name="institutionId"
+            required
+          >
+            <option [ngValue]="null">Select an institution</option>
+            <option *ngFor="let institution of institutions" [ngValue]="institution.id">
+              {{ institution.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            [(ngModel)]="newProject.description"
+            name="description"
+            placeholder="Enter project description (optional)"
+          ></textarea>
+        </div>
+
+        <!-- Date Range -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input
+              type="date"
+              id="startDate"
+              [(ngModel)]="newProject.startDate"
+              name="startDate"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="endDate">End Date</label>
+            <input
+              type="date"
+              id="endDate"
+              [(ngModel)]="newProject.endDate"
+              name="endDate"
+            />
+          </div>
+        </div>
+
+        <!-- Budget -->
+        <div class="form-group">
+          <label for="budget">Budget (USD)</label>
+          <input
+            type="number"
+            id="budget"
+            [(ngModel)]="newProject.budget"
+            name="budget"
+            placeholder="Enter budget amount"
+            min="0"
+            step="0.01"
+          />
+        </div>
+
+        <!-- Error Message in Modal -->
+        <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+        <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="closeCreateModal()">Cancel</button>
+          <button type="submit" class="btn-primary" [disabled]="loading">
+            {{ loading ? 'Creating...' : 'Create Project' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

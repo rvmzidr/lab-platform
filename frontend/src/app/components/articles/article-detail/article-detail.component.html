@@ -1,0 +1,167 @@
+<div class="article-detail-container">
+  <div *ngIf="loading" class="loading">Loading article...</div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    <i class="fas fa-exclamation-triangle"></i> {{ error }}
+    <button (click)="goBack()" class="btn btn-secondary">Go Back</button>
+  </div>
+
+  <div *ngIf="!loading && !error && article" class="article-content">
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <button (click)="goBack()" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Articles
+      </button>
+      <button *ngIf="isAdmin" (click)="editArticle()" class="btn btn-primary">
+        <i class="fas fa-edit"></i> Edit Article
+      </button>
+    </div>
+
+    <!-- Article Header -->
+    <div class="article-header">
+      <div class="title-section">
+        <h1 class="article-title">{{ article.title }}</h1>
+        <div class="article-badges">
+          <span [class]="'badge ' + getStatusClass()">{{ article.status }}</span>
+          <span [class]="'badge ' + getVisibilityClass()">
+            {{ article.visibility === 'members_only' ? 'Members Only' : 'Public' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="metadata-grid">
+        <div class="metadata-item">
+          <i class="fas fa-users"></i>
+          <div>
+            <strong>Authors</strong>
+            <p>{{ article.authors }}</p>
+          </div>
+        </div>
+
+        <div class="metadata-item" *ngIf="article.publicationDate">
+          <i class="fas fa-calendar"></i>
+          <div>
+            <strong>Publication Date</strong>
+            <p>{{ article.publicationDate }}</p>
+          </div>
+        </div>
+
+        <div class="metadata-item" *ngIf="article.journal">
+          <i class="fas fa-book"></i>
+          <div>
+            <strong>Journal/Conference</strong>
+            <p>{{ article.journal }}</p>
+          </div>
+        </div>
+
+        <div class="metadata-item" *ngIf="article.doi">
+          <i class="fas fa-link"></i>
+          <div>
+            <strong>DOI</strong>
+            <p>
+              <a [href]="getDoiUrl()" target="_blank" class="doi-link">
+                {{ article.doi }} <i class="fas fa-external-link-alt"></i>
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <div class="metadata-item" *ngIf="article.team">
+          <i class="fas fa-flask"></i>
+          <div>
+            <strong>Research Team</strong>
+            <p>{{ article.team.name }}</p>
+          </div>
+        </div>
+
+        <div class="metadata-item" *ngIf="article.project">
+          <i class="fas fa-project-diagram"></i>
+          <div>
+            <strong>Associated Project</strong>
+            <p>
+              <a (click)="viewProject()" class="project-link">
+                {{ article.project.name }}
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <div class="metadata-item" *ngIf="article.author">
+          <i class="fas fa-user"></i>
+          <div>
+            <strong>Submitted By</strong>
+            <p>{{ article.author.firstName }} {{ article.author.lastName }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Abstract Section -->
+    <div class="article-section" *ngIf="article.abstract">
+      <h2><i class="fas fa-file-alt"></i> Abstract</h2>
+      <div class="abstract-content">
+        {{ article.abstract }}
+      </div>
+    </div>
+
+    <!-- Keywords Section -->
+    <div class="article-section" *ngIf="article.keywords">
+      <h2><i class="fas fa-tags"></i> Keywords</h2>
+      <div class="keywords-container">
+        <span *ngFor="let keyword of article.keywords.split(',')" class="keyword-tag">
+          {{ keyword.trim() }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Team Details Section -->
+    <div class="article-section" *ngIf="article.team && article.team.expertise">
+      <h2><i class="fas fa-flask"></i> Research Team Details</h2>
+      <div class="team-details">
+        <h3>{{ article.team.name }}</h3>
+        <p><strong>Expertise:</strong> {{ article.team.expertise }}</p>
+        <p *ngIf="article.team.objectives"><strong>Objectives:</strong> {{ article.team.objectives }}</p>
+      </div>
+    </div>
+
+    <!-- Project Details Section -->
+    <div class="article-section" *ngIf="article.project">
+      <h2><i class="fas fa-project-diagram"></i> Associated Project</h2>
+      <div class="project-details">
+        <h3>{{ article.project.name }}</h3>
+        <div class="project-meta">
+          <p *ngIf="article.project.fundingSource">
+            <strong>Funding Source:</strong> {{ article.project.fundingSource }}
+          </p>
+          <p *ngIf="article.project.budget">
+            <strong>Budget:</strong> {{ article.project.budget | currency }}
+          </p>
+          <p *ngIf="article.project.startDate && article.project.endDate">
+            <strong>Duration:</strong> {{ article.project.startDate }} - {{ article.project.endDate }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button *ngIf="article.pdfUrl" (click)="openPdf()" class="btn btn-primary btn-lg">
+        <i class="fas fa-file-pdf"></i> View Full Article (PDF)
+      </button>
+      <button *ngIf="article.doi" (click)="openDoi()" class="btn btn-outline btn-lg">
+        <i class="fas fa-external-link-alt"></i> View on Publisher Site
+      </button>
+    </div>
+
+    <!-- Metadata Footer -->
+    <div class="article-footer">
+      <p><small>
+        <i class="fas fa-clock"></i>
+        Article added on {{ article.createdAt | date:'medium' }}
+        <span *ngIf="article.updatedAt !== article.createdAt">
+          | Last updated {{ article.updatedAt | date:'medium' }}
+        </span>
+      </small></p>
+    </div>
+  </div>
+</div>

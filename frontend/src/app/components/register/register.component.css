@@ -1,0 +1,174 @@
+/* =========================================
+   REGISTER — THEME LABORATOIRE PRO (light)
+   Harmonisé avec les autres pages (login/home)
+   ========================================= */
+
+:root {
+  --lab-primary: #0ea5a4;
+  --lab-primary-2: #2dd4bf;
+  --lab-accent: #38bdf8;
+  --lab-ink: #0b1f2a;
+  --lab-muted: #5b6b79;
+  --lab-bg: #f6f9fb;
+  --lab-surface: #ffffff;
+  --lab-surface-2: #f2f7f9;
+  --lab-border: rgba(11,31,42,.12);
+  --lab-border-strong: rgba(11,31,42,.18);
+  --shadow-sm: 0 6px 18px rgba(11,31,42,.08);
+  --shadow-md: 0 14px 30px rgba(11,31,42,.12);
+  --r-lg: 16px;
+  --r-md: 12px;
+  --r-sm: 10px;
+  --focus: 0 0 0 4px rgba(56,189,248,.22);
+}
+
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(1200px 400px at 50% 0%, rgba(45,212,191,.14) 0%, transparent 60%),
+    radial-gradient(1200px 400px at 50% 100%, rgba(56,189,248,.12) 0%, transparent 60%),
+    linear-gradient(180deg, var(--lab-bg) 0%, var(--lab-surface-2) 100%);
+  padding: 2rem;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.btn-back {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  background: var(--lab-surface);
+  border: 1px solid var(--lab-border-strong);
+  color: var(--lab-primary);
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 0.85rem;
+  transition: all .18s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-back:hover {
+  background: var(--lab-primary);
+  color: white;
+  transform: translateX(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.register-card {
+  width: 100%;
+  max-width: 760px;
+  padding: 2.5rem;
+  box-shadow: var(--shadow-md);
+  border-radius: var(--r-lg);
+  position: relative;
+  background: var(--lab-surface);
+  border: 1px solid var(--lab-border);
+}
+
+.header h1 {
+  text-align: center;
+  color: var(--lab-ink);
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+
+.header p {
+  text-align: center;
+  color: var(--lab-muted);
+  margin-bottom: 1.25rem;
+}
+
+.lab-title {
+  color: var(--lab-primary-2) !important;
+  font-weight: 800;
+  font-size: 1rem !important;
+}
+
+/* Section header used in register form */
+.section-header{
+  margin: 1.6rem 0 1rem 0;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(11,31,42,.06);
+  position: relative;
+}
+
+.section-header::after{
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 86px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--lab-primary-2), var(--lab-accent));
+  border-radius: 999px;
+}
+
+.section-header h2{
+  color: var(--lab-ink);
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.form-group{margin-bottom: 18px}
+
+.form-group label{display:block;margin-bottom:8px;color:var(--lab-muted);font-weight:700;font-size:0.85rem}
+
+.form-group input,
+.form-group select,
+textarea{
+  width:100%;
+  padding:0.78rem 0.9rem;
+  border:1px solid var(--lab-border);
+  border-radius:var(--r-sm);
+  font-size:0.95rem;
+  background:var(--lab-surface);
+  color:var(--lab-ink);
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+.form-group input::placeholder{color:rgba(11,31,42,.35)}
+
+.form-group input:focus, .form-group select:focus, textarea:focus{outline:none;border-color:var(--lab-accent);box-shadow:var(--focus)}
+
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+
+.radio-group{display:flex;gap:16px;padding:8px 0}
+.radio-label{display:flex;align-items:center;gap:0.6rem;cursor:pointer;padding:8px;border-radius:8px;background:var(--lab-surface-2);border:1px solid rgba(11,31,42,.04)}
+.radio-label input[type="radio"]{margin:0}
+.radio-label span{color:var(--lab-ink);font-weight:600}
+
+.checkbox-label{display:flex;align-items:flex-start;gap:0.75rem;cursor:pointer;padding:8px;border-radius:8px;background:var(--lab-surface-2);border:1px solid rgba(11,31,42,.04)}
+.checkbox-label span{color:var(--lab-ink);font-size:.95rem;line-height:1.5}
+
+.phd-section{background:linear-gradient(180deg, #ffffff, #fbfdff);padding:1rem;border-radius:12px;border:1px solid rgba(11,31,42,.06);margin-top:10px}
+
+.help-text{display:block;margin-top:6px;color:var(--lab-muted);font-size:0.85rem}
+.help-text.warning{color:var(--lab-ink);background:linear-gradient(135deg,#fff7e6,#fff2cc);padding:8px;border-radius:8px;border:1px solid rgba(245,158,11,.12);font-weight:700}
+
+.form-actions{display:flex;gap:12px;margin-top:22px;margin-bottom:10px}
+
+.btn{flex:1;padding:0.9rem 1.2rem;font-size:0.95rem;font-weight:800;border-radius:var(--r-md);cursor:pointer;border:1px solid transparent}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+
+.btn-primary{background:#F59E0B;color:#fff;border:none;box-shadow:0 6px 20px rgba(245,158,11,.18)}
+.btn-primary:hover{background:#D97706;transform:translateY(-2px)}
+.btn-secondary{background:#fff;color:#1E3A8A;border:2px solid #1E3A8A}
+
+.footer-note{text-align:center;margin-top:18px;padding-top:12px;border-top:1px solid #e9eef2}
+.footer-note p{color:var(--lab-muted);font-size:14px;margin:0}
+.footer-note a{color:var(--lab-primary);text-decoration:none;font-weight:700}
+.footer-note a:hover{text-decoration:underline}
+
+@media (max-width:768px){
+  .register-card{padding:22px}
+  .form-row{grid-template-columns:1fr}
+  .form-actions{flex-direction:column}
+  .header h1{font-size:1.6rem}
+}

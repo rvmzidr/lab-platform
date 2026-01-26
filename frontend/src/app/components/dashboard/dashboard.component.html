@@ -1,0 +1,92 @@
+<!-- Dashboard Component Template -->
+<div class="dashboard-container">
+  
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="header-content">
+      <button class="btn-home" routerLink="/welcome" type="button" title="Back to Home">
+        🏠 Home
+      </button>
+      <h1>Lab Platform Dashboard</h1>
+      <button class="btn btn-logout" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    
+    <!-- User Profile Card -->
+    <div class="card profile-card">
+      <h2>Welcome, {{ currentUser?.firstName }} {{ currentUser?.lastName }}!</h2>
+      
+      <div class="profile-info">
+        <div class="info-row">
+          <span class="label">Email:</span>
+          <span class="value">{{ currentUser?.email }}</span>
+        </div>
+        
+        <div class="info-row">
+          <span class="label">National ID:</span>
+          <span class="value">{{ currentUser?.nationalId }}</span>
+        </div>
+        
+        <div class="info-row">
+          <span class="label">Role:</span>
+          <span class="value role-badge" [class.admin]="currentUser?.role === 'admin'" 
+                [class.member]="currentUser?.role === 'member'">
+            {{ getRoleDisplayName() }}
+          </span>
+        </div>
+        
+        <div class="role-description">
+          <p>{{ getRoleDescription() }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Access Menu -->
+    <div class="quick-access">
+      <h3>Quick Access</h3>
+      
+      <div class="menu-grid">
+        
+        <!-- Admin-only: Users Management -->
+        <div class="menu-item card" *ngIf="isAdmin()">
+          <div class="menu-icon">👥</div>
+          <h4>Users Management</h4>
+          <p>Approve, reject, and manage user accounts</p>
+          <button class="btn btn-primary" routerLink="/admin/users">Manage Users</button>
+        </div>
+
+        <!-- Projects Section -->
+        <div class="menu-item card">
+          <div class="menu-icon">📁</div>
+          <h4>Projects</h4>
+          <p *ngIf="isAdmin()">View and manage all laboratory projects</p>
+          <p *ngIf="isMember()">View projects you're assigned to</p>
+          <button class="btn btn-primary" routerLink="/projects">View Projects</button>
+        </div>
+
+        <!-- Purchase Requests Section -->
+        <div class="menu-item card">
+          <div class="menu-icon">🛒</div>
+          <h4>Purchase Requests</h4>
+          <p *ngIf="isAdmin()">Review and approve equipment purchase requests</p>
+          <p *ngIf="isMember()">View purchase requests status</p>
+          <button class="btn btn-primary" routerLink="/purchase-requests">View Requests</button>
+        </div>
+
+        <!-- Scientific Articles Section -->
+        <div class="menu-item card">
+          <div class="menu-icon">📚</div>
+          <h4>Scientific Articles</h4>
+          <p *ngIf="isAdmin()">Manage and publish scientific articles</p>
+          <p *ngIf="isMember()">View and manage research publications</p>
+          <button class="btn btn-primary" routerLink="/dashboard/articles">View Articles</button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

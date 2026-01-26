@@ -1,0 +1,123 @@
+<div class="home-container">
+  <!-- LOADING STATE -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p style="margin-top: 20px; font-size: 1.1rem; color: #6B7280;">Chargement des informations du laboratoire...</p>
+  </div>
+
+  <!-- ERROR STATE -->
+  <div *ngIf="error && !loading" class="error-container">
+    <p class="error-text">{{ error }}</p>
+    <button class="btn-primary" (click)="loadLabInfo()" style="margin-top: 20px;">Réessayer</button>
+  </div>
+
+  <!-- CONTENT -->
+  <div *ngIf="labInfo && !loading">
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero-section">
+      <div class="hero-background"></div>
+      <div class="hero-content">
+        <img src="assets/images/logo-lr02.jpg" alt="Logo {{ labInfo.shortName }}" class="lab-logo">
+        
+        <h1 class="hero-title">{{ labInfo.fullName }}</h1>
+        
+        <p class="hero-subtitle">Créé en {{ labInfo.createdYear }}</p>
+        
+        <p class="hero-address">📍 {{ labInfo.address }}</p>
+        
+        
+
+        <div class="hero-buttons">
+          <button class="btn-primary" (click)="navigateToAbout()">
+            Découvrir le laboratoire
+          </button>
+          <button class="btn-secondary" (click)="navigateToLogin()">
+            Espace collaborateur
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRESENTATION SECTION ===== -->
+    <section class="presentation-section">
+      <div class="section-container">
+        <h2 class="section-title">Présentation Générale</h2>
+        <p class="section-subtitle">Excellence Scientifique et Innovation Nucléaire en Tunisie</p>
+                <!-- Images Gallery -->
+        <div class="cnstn-images-gallery">
+          <img src="assets/images/cnstn 1.jpg" alt="Centre National des Sciences et Technologies Nucléaires" class="cnstn-image">
+          <img src="assets/images/iameges de cnstn.jpg" alt="CNSTN Laboratoire" class="cnstn-image">
+        </div>
+                <p class="presentation-text">
+          Le <strong>Laboratoire de Recherche en Energie et Matière</strong> ({{ labInfo.shortName }}) est un centre d'excellence tunisien dédié à la recherche et au développement dans le domaine des sciences nucléaires. Créé en <strong>{{ labInfo.createdYear }}</strong>, notre laboratoire s'inscrit dans une vision stratégique de promotion de la science nucléaire au service du développement durable.
+        </p>
+        
+        <p class="presentation-text">
+          {{ labInfo.presentation }}
+        </p>
+        
+        <p class="presentation-text" *ngIf="labInfo.context">
+          {{ labInfo.context }}
+        </p>
+        
+        <p class="presentation-text">
+          Notre expertise s'articule autour de <strong>quatre axes majeurs</strong> : la radiochimie appliquée à la sécurité alimentaire et environnementale, l'étude des matériaux irradiés et leurs applications énergétiques, la modélisation physique des processus nucléaires, et l'analyse avancée par spectrométrie gamma.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== TEAMS PREVIEW SECTION ===== -->
+    <section class="teams-preview-section">
+      <div class="section-container">
+        <h2 class="section-title">Nos Équipes de Recherche</h2>
+        <p class="section-subtitle">4 équipes spécialisées au service de la recherche nucléaire</p>
+        
+        <div class="teams-grid">
+          <div class="team-card">
+            <div class="team-number">01</div>
+            <h3 class="team-name">Techniques Radiochimiques</h3>
+            <p class="team-description">
+              Sécurité alimentaire et protection de l'environnement par analyse radiochimique
+            </p>
+          </div>
+
+          <div class="team-card">
+            <div class="team-number">02</div>
+            <h3 class="team-name">Matériaux Irradiés</h3>
+            <p class="team-description">
+              Dosimétrie et applications énergétiques des matériaux sous irradiation
+            </p>
+          </div>
+
+          <div class="team-card">
+            <div class="team-number">03</div>
+            <h3 class="team-name">Modélisation Physique</h3>
+            <p class="team-description">
+              Simulation et optimisation des systèmes nucléaires par modélisation
+            </p>
+          </div>
+
+          <div class="team-card">
+            <div class="team-number">04</div>
+            <h3 class="team-name">Instrumentation Nucléaire</h3>
+            <p class="team-description">
+              Développement de systèmes de détection haute résolution
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CTA SECTION ===== -->
+    <section class="cta-section">
+      <div class="section-container">
+        <p class="cta-text">
+          Découvrez en détail nos équipes, nos projets et nos réalisations
+        </p>
+        <button class="btn-primary" (click)="navigateToAbout()">
+          En savoir plus
+        </button>
+      </div>
+    </section>
+  </div>
+</div>

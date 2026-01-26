@@ -1,0 +1,364 @@
+/* =========================
+   THEME "LABORATOIRE" PRO
+   ========================= */
+
+/* Variables (facile à ajuster) */
+:root{
+  --lab-bg-1: #0b1f2a;          /* fond sidebar (bleu nuit) */
+  --lab-bg-2: #103445;          /* dégradé secondaire */
+  --lab-surface: rgba(255,255,255,.06);
+  --lab-border: rgba(255,255,255,.10);
+
+  --lab-primary: #0ea5a4;       /* teal médical */
+  --lab-primary-2: #2dd4bf;     /* teal clair */
+  --lab-accent: #38bdf8;        /* bleu clair */
+  --lab-text: rgba(255,255,255,.92);
+  --lab-text-dim: rgba(255,255,255,.70);
+
+  --shadow-1: 0 8px 22px rgba(0,0,0,.22);
+  --shadow-2: 0 10px 28px rgba(0,0,0,.28);
+}
+
+/* =========================
+   Bouton Hamburger (clinique)
+   ========================= */
+.hamburger-btn{
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 1002;
+
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  border: 1px solid rgba(14,165,164,.35);
+
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06)),
+    linear-gradient(135deg, rgba(14,165,164,.95) 0%, rgba(56,189,248,.70) 100%);
+  box-shadow: 0 10px 24px rgba(14,165,164,.18);
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+
+.hamburger-btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(14,165,164,.22);
+  filter: saturate(1.05);
+}
+
+.hamburger-btn:focus-visible{
+  outline: 3px solid rgba(56,189,248,.65);
+  outline-offset: 3px;
+}
+
+.hamburger-btn span{
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: rgba(255,255,255,.95);
+  border-radius: 2px;
+  transition: transform .22s ease, opacity .18s ease;
+}
+
+.hamburger-btn.active span:nth-child(1){
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburger-btn.active span:nth-child(2){
+  opacity: 0;
+}
+.hamburger-btn.active span:nth-child(3){
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* =========================
+   Overlay (plus doux, pro)
+   ========================= */
+.sidebar-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 10, 15, 0.55);
+  z-index: 999;
+  animation: labFadeIn .18s ease;
+  backdrop-filter: blur(2px);
+}
+
+@keyframes labFadeIn{
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* =========================
+   Sidebar principale
+   ========================= */
+.sidebar{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 280px;
+  height: 100vh;
+
+  color: var(--lab-text);
+  background:
+    radial-gradient(900px 500px at 10% 0%, rgba(45,212,191,.20) 0%, transparent 55%),
+    radial-gradient(700px 420px at 100% 20%, rgba(56,189,248,.18) 0%, transparent 55%),
+    linear-gradient(180deg, var(--lab-bg-2) 0%, var(--lab-bg-1) 100%);
+
+  display: flex;
+  flex-direction: column;
+
+  box-shadow: var(--shadow-2);
+  z-index: 1000;
+  overflow-y: auto;
+
+  transform: translateX(-100%);
+  transition: transform .22s ease;
+  border-right: 1px solid rgba(255,255,255,.08);
+}
+
+.sidebar.open{
+  transform: translateX(0);
+}
+
+/* =========================
+   Header
+   ========================= */
+.sidebar-header{
+  padding: 18px 18px 16px;
+  text-align: center;
+
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+  border-bottom: 1px solid rgba(255,255,255,.08);
+
+  cursor: pointer;
+  transition: background .2s ease;
+}
+
+.sidebar-header:hover{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+}
+
+.sidebar-logo{
+  width: 74px;
+  height: 74px;
+  object-fit: contain;
+  border-radius: 16px; /* plus "badge" moderne qu'un cercle */
+  margin-bottom: 10px;
+
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 10px 20px rgba(0,0,0,.18);
+}
+
+.sidebar-title{
+  font-size: 13px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--lab-text);
+  letter-spacing: .4px;
+}
+
+/* =========================
+   Navigation
+   ========================= */
+.sidebar-nav{
+  flex: 1;
+  padding: 12px 10px 14px;
+  overflow-y: auto;
+}
+
+.sidebar-link{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 11px 12px;
+  margin: 6px 6px;
+
+  color: var(--lab-text-dim);
+  text-decoration: none;
+  font-size: 14px;
+
+  border-radius: 12px;
+  border: 1px solid transparent;
+
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease;
+}
+
+.sidebar-link .icon{
+  font-size: 18px;
+  width: 22px;
+  text-align: center;
+  color: rgba(255,255,255,.82);
+}
+
+.sidebar-link:hover{
+  color: var(--lab-text);
+  background: rgba(255,255,255,.06);
+  border-color: rgba(14,165,164,.22);
+  transform: translateX(2px);
+}
+
+.sidebar-link.active{
+  color: var(--lab-text);
+  background:
+    linear-gradient(135deg, rgba(14,165,164,.20), rgba(56,189,248,.12));
+  border-color: rgba(45,212,191,.35);
+  box-shadow: 0 10px 20px rgba(0,0,0,.18);
+  font-weight: 700;
+}
+
+.sidebar-divider{
+  height: 1px;
+  background: rgba(255,255,255,.10);
+  margin: 12px 16px;
+}
+
+/* =========================
+   Footer
+   ========================= */
+.sidebar-footer{
+  padding: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+/* CTA Login (pro) */
+.login-btn{
+  background: linear-gradient(135deg, rgba(14,165,164,.95) 0%, rgba(56,189,248,.65) 100%);
+  border: 1px solid rgba(255,255,255,.14);
+  color: #ffffff;
+  justify-content: center;
+
+  border-radius: 12px;
+  font-weight: 800;
+
+  box-shadow: 0 12px 26px rgba(14,165,164,.18);
+}
+
+.login-btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 16px 32px rgba(14,165,164,.22);
+}
+
+/* =========================
+   User Info (carte clinique)
+   ========================= */
+.user-info{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px;
+  border-radius: 14px;
+
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+.user-avatar{
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+
+  background:
+    radial-gradient(12px 12px at 30% 30%, rgba(255,255,255,.25), transparent 60%),
+    linear-gradient(135deg, rgba(45,212,191,.30), rgba(56,189,248,.18));
+  border: 1px solid rgba(255,255,255,.10);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  color: rgba(255,255,255,.92);
+}
+
+.user-details{
+  flex: 1;
+  min-width: 0;
+}
+
+.user-name{
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: var(--lab-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Logout (sobre, danger maîtrisé) */
+.logout-btn{
+  width: 100%;
+  justify-content: center;
+
+  padding: 8px 10px;
+  border-radius: 12px;
+
+  background: rgba(248,113,113,.10);
+  border: 1px solid rgba(248,113,113,.25);
+
+  color: rgba(255,255,255,.88);
+  cursor: pointer;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  transition: background .18s ease, border-color .18s ease, transform .18s ease;
+}
+
+.logout-btn:hover{
+  background: rgba(248,113,113,.16);
+  border-color: rgba(248,113,113,.40);
+  transform: translateY(-1px);
+}
+
+.logout-btn .icon{
+  font-size: 14px;
+  margin: 0;
+}
+
+/* =========================
+   Scrollbar (discret)
+   ========================= */
+.sidebar::-webkit-scrollbar{
+  width: 8px;
+}
+.sidebar::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.03);
+}
+.sidebar::-webkit-scrollbar-thumb{
+  background: rgba(45,212,191,.28);
+  border-radius: 999px;
+  border: 2px solid rgba(0,0,0,0);
+  background-clip: padding-box;
+}
+.sidebar::-webkit-scrollbar-thumb:hover{
+  background: rgba(45,212,191,.38);
+  border: 2px solid rgba(0,0,0,0);
+  background-clip: padding-box;
+}
+
+/* =========================
+   Responsive
+   ========================= */
+@media (max-width: 768px){
+  .sidebar{ width: 240px; }
+  .sidebar-logo{ width: 62px; height: 62px; }
+  .sidebar-title{ font-size: 12px; }
+  .sidebar-link{ font-size: 13.5px; padding: 10px 11px; }
+}

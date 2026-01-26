@@ -1,0 +1,224 @@
+/* =========================================
+   DASHBOARD — THEME LABORATOIRE PRO
+   ========================================= */
+
+:root {
+  --lab-primary: #0ea5a4;
+  --lab-primary-2: #2dd4bf;
+  --lab-accent: #38bdf8;
+  --lab-ink: #0b1f2a;
+  --lab-muted: #5b6b79;
+  --lab-bg: #f6f9fb;
+  --lab-surface: #ffffff;
+  --lab-surface-2: #f2f7f9;
+  --lab-border: rgba(11,31,42,.12);
+  --lab-border-strong: rgba(11,31,42,.18);
+  --shadow-sm: 0 6px 18px rgba(11,31,42,.08);
+  --shadow-md: 0 14px 30px rgba(11,31,42,.12);
+  --r-lg: 16px;
+  --r-md: 12px;
+  --r-sm: 10px;
+  --focus: 0 0 0 4px rgba(56,189,248,.22);
+}
+
+.dashboard-container {
+  min-height: 100vh;
+  background: var(--lab-bg);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.dashboard-header {
+  background: linear-gradient(135deg, rgba(14,165,164,.95), rgba(56,189,248,.75));
+  color: white;
+  padding: 1.25rem 0;
+  box-shadow: var(--shadow-sm);
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.btn-home {
+  background: transparent;
+  border: 2px solid rgba(255,255,255,.85);
+  color: white;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 0.85rem;
+  transition: all .18s ease;
+  letter-spacing: 0.01em;
+}
+
+.btn-home:hover {
+  background: white;
+  color: var(--lab-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0,0,0,.12);
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 800;
+  flex: 1;
+  text-align: center;
+  letter-spacing: -0.4px;
+}
+
+.btn-logout {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid white;
+}
+
+.btn-logout:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.profile-card {
+  margin-top: 2rem;
+}
+
+.profile-card h2 {
+  color: var(--lab-ink);
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--lab-border);
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: -0.4px;
+}
+
+.profile-info {
+  margin-top: 1.25rem;
+}
+
+.info-row {
+  display: flex;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--lab-border);
+  transition: background .15s ease;
+}
+
+.info-row:hover {
+  background: var(--lab-surface-2);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row .label {
+  font-weight: 700;
+  color: var(--lab-muted);
+  width: 150px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.info-row .value {
+  color: var(--lab-ink);
+  flex: 1;
+  font-weight: 600;
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.role-badge.admin {
+  background: rgba(220,53,69,.14);
+  color: rgba(120,15,15,.90);
+  border: 1px solid rgba(220,53,69,.30);
+}
+
+.role-badge.manager {
+  background: rgba(56,189,248,.14);
+  color: rgba(11,31,42,.90);
+  border: 1px solid rgba(56,189,248,.30);
+}
+
+.role-badge.member {
+  background: rgba(14,165,164,.14);
+  color: rgba(11,31,42,.90);
+  border: 1px solid rgba(14,165,164,.30);
+}
+
+.role-description {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border-left: 4px solid #667eea;
+}
+
+.role-description p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.quick-access {
+  margin-top: 40px;
+}
+
+.quick-access h3 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.menu-item {
+  text-align: center;
+  padding: 30px 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.menu-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.menu-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.menu-item h4 {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+.menu-item p {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.menu-item .btn {
+  margin-top: 10px;
+}

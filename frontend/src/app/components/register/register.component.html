@@ -1,0 +1,231 @@
+<!-- Registration Form -->
+<div class="register-container">
+  <div class="register-card">
+    
+    <div class="header">
+      <h1>📋 Formulaire d'Inscription</h1>
+      <p class="lab-title">Laboratoire de Recherche en Énergie et Matière – LR16CNSTN02</p>
+    </div>
+
+    <!-- Success Message -->
+    <div class="alert alert-success" *ngIf="successMessage">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+      {{ successMessage }}
+    </div>
+
+    <!-- Error Message -->
+    <div class="alert alert-error" *ngIf="errorMessage">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+      </svg>
+      {{ errorMessage }}
+    </div>
+
+    <form (ngSubmit)="onRegister()" #registerForm="ngForm">
+      
+      <!-- 1️⃣ IDENTITÉ -->
+      <div class="section-header">
+        <h2>1️⃣ IDENTITÉ</h2>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="lastName">Nom *</label>
+          <input type="text" id="lastName" name="lastName" [(ngModel)]="formData.lastName" required [disabled]="isLoading" placeholder="Votre nom" />
+        </div>
+        <div class="form-group">
+          <label for="firstName">Prénom *</label>
+          <input type="text" id="firstName" name="firstName" [(ngModel)]="formData.firstName" required [disabled]="isLoading" placeholder="Votre prénom" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="birthDate">Date de naissance *</label>
+          <input type="date" id="birthDate" name="birthDate" [(ngModel)]="formData.birthDate" required [disabled]="isLoading" />
+        </div>
+        <div class="form-group">
+          <label for="birthPlace">Lieu de naissance *</label>
+          <input type="text" id="birthPlace" name="birthPlace" [(ngModel)]="formData.birthPlace" required [disabled]="isLoading" placeholder="Ville, Pays" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Sexe *</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" name="gender" value="Masculin" [(ngModel)]="formData.gender" required [disabled]="isLoading" />
+            <span>☐ Masculin</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="gender" value="Féminin" [(ngModel)]="formData.gender" required [disabled]="isLoading" />
+            <span>☐ Féminin</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 2️⃣ CONTACT -->
+      <div class="section-header">
+        <h2>2️⃣ CONTACT</h2>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email institutionnel *</label>
+        <input type="email" id="email" name="email" [(ngModel)]="formData.email" required [disabled]="isLoading" placeholder="votre.email@institution.tn" />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Téléphone *</label>
+        <input type="tel" id="phone" name="phone" [(ngModel)]="formData.phone" required [disabled]="isLoading" placeholder="+216 XX XXX XXX" />
+      </div>
+
+      <div class="form-group">
+        <label for="address">Adresse (optionnel)</label>
+        <input type="text" id="address" name="address" [(ngModel)]="formData.address" [disabled]="isLoading" placeholder="Adresse complète" />
+      </div>
+
+      <!-- 3️⃣ INFORMATIONS PROFESSIONNELLES -->
+      <div class="section-header">
+        <h2>3️⃣ INFORMATIONS PROFESSIONNELLES</h2>
+      </div>
+
+      <div class="form-group">
+        <label for="grade">Grade / Statut au laboratoire *</label>
+        <select id="grade" name="grade" [(ngModel)]="formData.grade" required [disabled]="isLoading">
+          <option value="">Sélectionnez votre grade</option>
+          <option value="Prof">☐ Professeur (Prof)</option>
+          <option value="MC">☐ Maître de Conférences (MC)</option>
+          <option value="MA">☐ Maître Assistant (MA)</option>
+          <option value="Chercheur">☐ Chercheur</option>
+          <option value="Doctorant">☐ Doctorant</option>
+          <option value="Étudiant">☐ Étudiant</option>
+          <option value="Ingénieur/Technicien">☐ Ingénieur / Technicien</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="institution">Établissement / Institution d'affectation *</label>
+        <input type="text" id="institution" name="institution" [(ngModel)]="formData.institution" required [disabled]="isLoading" placeholder="Nom de votre établissement" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="lastDegree">Dernier diplôme obtenu *</label>
+          <input type="text" id="lastDegree" name="lastDegree" [(ngModel)]="formData.lastDegree" required [disabled]="isLoading" placeholder="Ex: Doctorat en Physique" />
+        </div>
+        <div class="form-group">
+          <label for="degreeDate">Date d'obtention *</label>
+          <input type="date" id="degreeDate" name="degreeDate" [(ngModel)]="formData.degreeDate" required [disabled]="isLoading" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="degreeInstitution">Établissement du diplôme *</label>
+        <input type="text" id="degreeInstitution" name="degreeInstitution" [(ngModel)]="formData.degreeInstitution" required [disabled]="isLoading" placeholder="Université / École" />
+      </div>
+
+      <div class="form-group">
+        <label for="orcid">Identifiant ORCID (optionnel mais recommandé)</label>
+        <input type="text" id="orcid" name="orcid" [(ngModel)]="formData.orcid" [disabled]="isLoading" placeholder="https://orcid.org/0000-0002-XXXX-XXXX" />
+        <small class="help-text">L'ORCID est un identifiant unique pour les chercheurs</small>
+      </div>
+
+      <!-- 4️⃣ INFORMATIONS DOCTORANT -->
+      <div class="section-header">
+        <h2>4️⃣ INFORMATIONS DOCTORANT</h2>
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" name="isPhD" [(ngModel)]="formData.isPhD" [disabled]="isLoading" />
+          <span>Je suis actuellement doctorant(e)</span>
+        </label>
+      </div>
+
+      <div *ngIf="formData.isPhD" class="phd-section">
+        <div class="form-group">
+          <label for="phdTopic">Sujet de recherche *</label>
+          <textarea id="phdTopic" name="phdTopic" [(ngModel)]="formData.phdTopic" [required]="formData.isPhD" [disabled]="isLoading" rows="3" placeholder="Décrivez votre sujet de thèse"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phdProgress">Pourcentage d'avancement (%) *</label>
+            <input type="number" id="phdProgress" name="phdProgress" [(ngModel)]="formData.phdProgress" [required]="formData.isPhD" [disabled]="isLoading" min="0" max="100" placeholder="0-100" />
+          </div>
+          <div class="form-group">
+            <label for="phdStartYear">Année de première inscription *</label>
+            <input type="number" id="phdStartYear" name="phdStartYear" [(ngModel)]="formData.phdStartYear" [required]="formData.isPhD" [disabled]="isLoading" min="2000" max="2030" placeholder="2024" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phdUniversity">Université d'inscription *</label>
+          <input type="text" id="phdUniversity" name="phdUniversity" [(ngModel)]="formData.phdUniversity" [required]="formData.isPhD" [disabled]="isLoading" placeholder="Nom de l'université" />
+        </div>
+
+        <div class="form-group">
+          <label for="phdSupervisor">Directeur de thèse *</label>
+          <input type="text" id="phdSupervisor" name="phdSupervisor" [(ngModel)]="formData.phdSupervisor" [required]="formData.isPhD" [disabled]="isLoading" placeholder="Nom du directeur de thèse" />
+        </div>
+      </div>
+
+      <!-- 5️⃣ COMPTE & RÔLE -->
+      <div class="section-header">
+        <h2>5️⃣ COMPTE & RÔLE DANS LA PLATEFORME</h2>
+      </div>
+
+      <div class="form-group">
+        <label for="role">Rôle demandé *</label>
+        <select id="role" name="role" [(ngModel)]="formData.role" required [disabled]="isLoading">
+          <option value="member">☐ Membre</option>
+        </select>
+        <small class="help-text warning">⚠️ L'activation du compte et l'attribution finale du rôle sont soumises à validation par l'Administration du laboratoire.</small>
+      </div>
+
+      <!-- 6️⃣ MOT DE PASSE -->
+      <div class="section-header">
+        <h2>6️⃣ MOT DE PASSE</h2>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe *</label>
+        <input type="password" id="password" name="password" [(ngModel)]="formData.password" required [disabled]="isLoading" placeholder="Minimum 6 caractères" />
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirmer le mot de passe *</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" [(ngModel)]="formData.confirmPassword" required [disabled]="isLoading" placeholder="Ressaisissez le mot de passe" />
+      </div>
+
+      <!-- 7️⃣ VALIDATION -->
+      <div class="section-header">
+        <h2>7️⃣ VALIDATION</h2>
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" name="acceptTerms" [(ngModel)]="formData.acceptTerms" required [disabled]="isLoading" />
+          <span>☐ J'accepte que mes données soient utilisées dans le cadre des activités scientifiques et administratives du laboratoire LR16CNSTN02.</span>
+        </label>
+      </div>
+
+      <!-- Buttons -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="goBack()" [disabled]="isLoading">
+          ← Retour
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading || !registerForm.valid">
+          <span *ngIf="!isLoading">Soumettre la demande d'inscription</span>
+          <span *ngIf="isLoading">Envoi en cours...</span>
+        </button>
+      </div>
+
+      <div class="footer-note">
+        <p>Déjà un compte? <a routerLink="/login">Se connecter ici</a></p>
+      </div>
+    </form>
+  </div>
+</div>

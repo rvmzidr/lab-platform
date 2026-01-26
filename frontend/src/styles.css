@@ -1,0 +1,233 @@
+/* Global Styles for Lab Platform - Day 3 */
+
+/* ===== GOOGLE FONTS ===== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap');
+
+/* ===== GLOBAL RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== ROOT VARIABLES - CNSTN OFFICIAL COLORS ===== */
+:root {
+  --cnstn-blue: #1E3A8A;
+  --cnstn-blue-dark: #0F1E4A;
+  --cnstn-blue-light: #3B82F6;
+  --cnstn-yellow: #F59E0B;
+  --cnstn-yellow-dark: #D97706;
+  --cnstn-yellow-light: #FCD34D;
+  --white: #FFFFFF;
+  --light-gray: #F8FAFC;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --text-dark: #1F2937;
+  --text-gray: #6B7280;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 12px 35px rgba(0, 0, 0, 0.25);
+}
+
+/* ===== BODY ===== */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--light-gray);
+  color: var(--text-dark);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  color: var(--cnstn-blue);
+}
+
+/* Container utilities */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Card styling */
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  padding: 25px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ===== PROFESSIONAL BUTTON STYLES ===== */
+.btn {
+  padding: 12px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--cnstn-yellow) 0%, var(--cnstn-yellow-dark) 100%);
+  color: var(--cnstn-blue-dark);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--cnstn-yellow-dark) 0%, #B45309 100%);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.btn-secondary:hover {
+  background: white;
+  color: var(--cnstn-blue);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--cnstn-blue);
+  border: 2px solid var(--cnstn-blue);
+}
+
+.btn-outline:hover {
+  background: var(--cnstn-blue);
+  color: white;
+}
+
+/* ===== PROFESSIONAL IMAGE STYLES ===== */
+.img-professional {
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  object-fit: cover;
+}
+
+.img-professional:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-xl);
+}
+
+.img-rounded {
+  border-radius: 50%;
+  border: 4px solid var(--cnstn-yellow);
+  box-shadow: var(--shadow-lg);
+}
+
+.img-bordered {
+  border: 3px solid var(--gray-200);
+  padding: 8px;
+  background: white;
+}
+
+/* ===== GRADIENT BACKGROUNDS ===== */
+.gradient-primary {
+  background: linear-gradient(135deg, var(--cnstn-blue) 0%, var(--cnstn-blue-dark) 100%);
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, var(--cnstn-yellow) 0%, var(--cnstn-yellow-dark) 100%);
+}
+
+.gradient-overlay {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.95) 0%, rgba(15, 30, 74, 0.98) 100%);
+}
+
+/* Button styling */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-primary:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Form styling */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Alert messages */
+.alert {
+  padding: 12px 20px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+/* Loading spinner */
+.loading {
+  text-align: center;
+  padding: 20px;
+}

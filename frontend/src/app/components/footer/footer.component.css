@@ -1,0 +1,105 @@
+/* =========================================
+   FOOTER — THEME LABORATOIRE PRO
+   ========================================= */
+
+:root {
+  --lab-primary: #0ea5a4;
+  --lab-primary-2: #2dd4bf;
+  --lab-accent: #38bdf8;
+  --lab-ink: #0b1f2a;
+  --lab-surface: #ffffff;
+}
+
+.footer {
+  background: linear-gradient(135deg, rgba(14,165,164,.95), rgba(56,189,248,.75));
+  color: white;
+  padding: 3rem 1.5rem 1.5rem;
+  margin-top: auto;
+  box-shadow: 0 -6px 24px rgba(11,31,42,.15);
+  position: relative;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.85), transparent);
+}
+
+.footer-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.footer-section h3 {
+  color: white;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+
+.footer-section p {
+  line-height: 1.8;
+  margin-bottom: 0.75rem;
+  opacity: 0.95;
+  font-weight: 500;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 0.75rem;
+}
+
+.footer-links a {
+  color: rgba(255,255,255,.92);
+  text-decoration: none;
+  transition: all .18s ease;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.footer-links a:hover {
+  color: white;
+  transform: translateX(6px);
+  text-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 20px;
+  text-align: center;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.footer-lab-name {
+  font-weight: 600;
+  color: var(--cnstn-yellow);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .footer-section {
+    text-align: center;
+  }
+}

@@ -1,0 +1,266 @@
+<div class="articles-list-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <button class="btn-back" (click)="goBack()" type="button">
+        ← Back
+      </button>
+    <h1>Scientific Articles Management</h1>
+    <button *ngIf="isAdmin" (click)="openCreateModal()" class="btn btn-primary">
+      <i class="fas fa-plus"></i> Add New Article
+    </button>
+  </div>
+
+  <!-- Alert Messages -->
+  <div *ngIf="success" class="alert alert-success">
+    <i class="fas fa-check-circle"></i> {{ success }}
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    <i class="fas fa-exclamation-triangle"></i> {{ error }}
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <div class="filter-row">
+      <div class="filter-group">
+        <label>Search:</label>
+        <input 
+          type="text" 
+          [(ngModel)]="searchText" 
+          placeholder="Search articles..."
+          (keyup.enter)="applyFilters()"
+          class="filter-input">
+      </div>
+
+      <div class="filter-group" *ngIf="isAdmin">
+        <label>Status:</label>
+        <select [(ngModel)]="selectedStatus" class="filter-select">
+          <option value="">All Status</option>
+          <option value="draft">Draft</option>
+          <option value="published">Published</option>
+          <option value="archived">Archived</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Visibility:</label>
+        <select [(ngModel)]="selectedVisibility" class="filter-select">
+          <option value="">All</option>
+          <option value="public">Public</option>
+          <option value="members_only">Members Only</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Team:</label>
+        <select [(ngModel)]="selectedTeam" class="filter-select">
+          <option [ngValue]="null">All Teams</option>
+          <option *ngFor="let team of teams" [ngValue]="team.id">{{ team.name }}</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Project:</label>
+        <select [(ngModel)]="selectedProject" class="filter-select">
+          <option [ngValue]="null">All Projects</option>
+          <option *ngFor="let project of projects" [ngValue]="project.id">{{ project.name }}</option>
+        </select>
+      </div>
+
+      <div class="filter-actions">
+        <button (click)="applyFilters()" class="btn btn-primary btn-sm">Apply</button>
+        <button (click)="resetFilters()" class="btn btn-secondary btn-sm">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading">Loading articles...</div>
+
+  <!-- Articles Table -->
+  <div *ngIf="!loading" class="table-container">
+    <table class="articles-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Authors</th>
+          <th>Journal</th>
+          <th>Published</th>
+          <th>Status</th>
+          <th>Visibility</th>
+          <th>Team</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let article of articles">
+          <td class="title-cell">
+            <strong (click)="viewArticleDetail(article.id)" class="clickable-title">
+              {{ article.title }}
+            </strong>
+          </td>
+          <td>{{ article.authors.substring(0, 40) }}{{ article.authors.length > 40 ? '...' : '' }}</td>
+          <td>{{ article.journal || 'N/A' }}</td>
+          <td>{{ article.publicationDate || 'N/A' }}</td>
+          <td>
+            <span [class]="'badge ' + getStatusClass(article.status)">
+              {{ article.status }}
+            </span>
+          </td>
+          <td>
+            <span [class]="'badge ' + getVisibilityClass(article.visibility)">
+              {{ article.visibility === 'members_only' ? 'Members Only' : 'Public' }}
+            </span>
+          </td>
+          <td>{{ article.team?.name || '-' }}</td>
+          <td class="actions-cell">
+            <button (click)="viewArticleDetail(article.id)" class="btn-icon btn-view" title="View">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button *ngIf="isAdmin" (click)="openEditModal(article)" class="btn-icon btn-edit" title="Edit">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button *ngIf="isAdmin" (click)="deleteArticle(article.id)" class="btn-icon btn-delete" title="Delete">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="articles.length === 0">
+          <td colspan="8" class="no-data">No articles found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="!loading && articles.length > 0" class="pagination">
+    <div class="pagination-info">
+      Showing {{ (currentPage - 1) * articlesPerPage + 1 }} - 
+      {{ Math.min(currentPage * articlesPerPage, totalArticles) }} of {{ totalArticles }} articles
+    </div>
+    <div class="pagination-controls">
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1" class="btn btn-sm">Prev</button>
+      <button 
+        *ngFor="let page of getPageNumbers()"
+        (click)="goToPage(page)"
+        [class.active]="page === currentPage"
+        class="btn btn-sm">
+        {{ page }}
+      </button>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages" class="btn btn-sm">Next</button>
+    </div>
+  </div>
+</div>
+
+<!-- Article Modal -->
+<div *ngIf="showArticleModal" class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ editMode ? 'Edit Article' : 'Create New Article' }}</h2>
+      <button (click)="closeModal()" class="close-btn">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+      <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+      <form>
+        <div class="form-group">
+          <label>Title *</label>
+          <input type="text" [(ngModel)]="currentArticle.title" name="title" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <label>Authors *</label>
+          <input type="text" [(ngModel)]="currentArticle.authors" name="authors" 
+                 placeholder="e.g., Smith J., Doe A., Johnson B."
+                 class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <label>Abstract</label>
+          <textarea [(ngModel)]="currentArticle.abstract" name="abstract" rows="4" class="form-control"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Keywords</label>
+            <input type="text" [(ngModel)]="currentArticle.keywords" name="keywords" 
+                   placeholder="nuclear, radiation, safety"
+                   class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label>Publication Date</label>
+            <input type="date" [(ngModel)]="currentArticle.publicationDate" name="publicationDate" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Journal/Conference</label>
+            <input type="text" [(ngModel)]="currentArticle.journal" name="journal" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label>DOI</label>
+            <input type="text" [(ngModel)]="currentArticle.doi" name="doi" 
+                   placeholder="10.1234/example"
+                   class="form-control">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>PDF URL</label>
+          <input type="url" [(ngModel)]="currentArticle.pdfUrl" name="pdfUrl" 
+                 placeholder="https://..."
+                 class="form-control">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Status</label>
+            <select [(ngModel)]="currentArticle.status" name="status" class="form-control">
+              <option value="draft">Draft</option>
+              <option value="published">Published</option>
+              <option value="archived">Archived</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Visibility</label>
+            <select [(ngModel)]="currentArticle.visibility" name="visibility" class="form-control">
+              <option value="members_only">Members Only</option>
+              <option value="public">Public</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Project (Optional)</label>
+            <select [(ngModel)]="currentArticle.projectId" name="projectId" class="form-control">
+              <option [ngValue]="null">No Project</option>
+              <option *ngFor="let project of projects" [ngValue]="project.id">{{ project.name }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Team (Optional)</label>
+            <select [(ngModel)]="currentArticle.teamId" name="teamId" class="form-control">
+              <option [ngValue]="null">No Team</option>
+              <option *ngFor="let team of teams" [ngValue]="team.id">{{ team.name }}</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button (click)="closeModal()" class="btn btn-secondary">Cancel</button>
+      <button (click)="saveArticle()" class="btn btn-primary">
+        {{ editMode ? 'Update' : 'Create' }} Article
+      </button>
+    </div>
+  </div>
+</div>
