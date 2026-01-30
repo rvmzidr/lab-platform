@@ -25,13 +25,13 @@ pipeline {
                     // Build Backend
                     sh '''
                         cd backend
-                        docker build -t ${DOCKER_HUB_USERNAME}/lab-platform-backend:${TAG} .
+                        docker build -t ${ramzi85}/lab-platform-backend:${TAG} .
                     '''
                     
                     // Build Frontend
                     sh '''
                         cd frontend
-                        docker build -t ${DOCKER_HUB_USERNAME}/lab-platform-frontend:${TAG} .
+                        docker build -t ${ramzi85}/lab-platform-frontend:${TAG} .
                     '''
                 }
             }
@@ -43,8 +43,8 @@ pipeline {
                     echo 'Connexion à Docker Hub et push des images...'
                     sh '''
                         echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin
-                        docker push ${DOCKER_HUB_USERNAME}/lab-platform-backend:${TAG}
-                        docker push ${DOCKER_HUB_USERNAME}/lab-platform-frontend:${TAG}
+                        docker push ${ramzi85}/lab-platform-backend:${TAG}
+                        docker push ${ramzi85}/lab-platform-frontend:${TAG}
                         docker logout
                     '''
                 }
@@ -60,8 +60,8 @@ pipeline {
                         docker-compose down || true
                         
                         # Pull les nouvelles images
-                        docker pull ${DOCKER_HUB_USERNAME}/lab-platform-backend:${TAG}
-                        docker pull ${DOCKER_HUB_USERNAME}/lab-platform-frontend:${TAG}
+                        docker pull ${ramzi85}/lab-platform-backend:${TAG}
+                        docker pull ${ramzi85}/lab-platform-frontend:${TAG}
                         
                         # Démarrer les services
                         docker-compose up -d || true
