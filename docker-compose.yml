@@ -10,17 +10,19 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 15
+      start_period: 40s
 
   backend:
-    image: ramzi85/lab-platform-backend:latest
+    image: ramzi85/lab-platform-backend:${TAG}
     container_name: lab-backend
     restart: unless-stopped
     env_file:
       - .env
+      - .env.build
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     depends_on:
@@ -28,9 +30,11 @@ services:
         condition: service_healthy
 
   frontend:
-    image: ramzi85/lab-platform-frontend:latest
+    image: ramzi85/lab-platform-frontend:${TAG}
     container_name: lab-frontend
     restart: unless-stopped
+    env_file:
+      - .env.build
     ports:
       - "${FRONTEND_PORT}:80"
     depends_on:
