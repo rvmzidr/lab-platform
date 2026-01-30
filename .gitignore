@@ -1,0 +1,37 @@
+# Environment variables (ne pas commit les mots de passe réels)
+.env
+.env.local
+
+# Mais garder .env.build pour la configuration Docker Hub
+# .env.build
+
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Build outputs
+frontend/dist/
+backend/dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# Docker
+.dockerignore
+
+# MySQL data
+mysql-data/
