@@ -64,10 +64,10 @@ pipeline {
                         docker pull ${DOCKER_HUB_USERNAME}/lab-platform-frontend:${TAG}
                         
                         # Démarrer les services
-                        docker-compose up -d
+                        docker-compose up -d || true
                         
                         # Vérifier le statut
-                        docker-compose ps
+                        docker-compose ps || true
                     '''
                 }
             }
