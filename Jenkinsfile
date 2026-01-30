@@ -64,14 +64,45 @@ EOF
         stage('Push to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: '8369d43a-51c6-49bd-ae3b-ddbb23a1a4db', // ID de tes credentials Jenkins
+                    credentialsId: '8369d43a-51c6-49bd-ae3b-ddbb23a1a4db',
                     usernameVariable: 'DOCKER_HUB_USERNAME',
                     passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
                    
                     sh """
-                        echo \$DOCKER_HUB_PASSWORD | docker login -u \$DOCKER_HUB_USERNAME --password-stdin
-                        docker push \$DOCKER_HUB_USERNAME/lab-platform-backend:${TAG}
-                        docker push \$DOCKER_HUB_USERNAME/lab-platform-frontend:${TAG}
+                        # Fonction de retry avec timeout plus long
+                        retry_docker_push() {
+                            local image=\$1
+                            local max_attempts=3
+                            local attempt=1
+                            
+                            while [ \$attempt -le \$max_attempts ]; do
+                                echo "Tentative \$attempt/\$max_attempts pour \$image"
+                                if docker push \$image; then
+                                    echo "✅ Push réussi pour \$image"
+                                    return 0
+                                fi
+                                echo "⚠️  Échec - nouvelle tentative dans 10 secondes..."
+                                sleep 10
+                                attempt=\$((attempt + 1))
+                            done
+                            return 1
+                        }
+                        
+                        # Login Docker Hub avec retry
+                        echo "🔐 Connexion à Docker Hub..."
+                        for i in 1 2 3; do
+                            if echo \$DOCKER_HUB_PASSWORD | docker login -u \$DOCKER_HUB_USERNAME --password-stdin; then
+                                echo "✅ Login réussi"
+                                break
+                            fi
+                            echo "⚠️  Login échoué, tentative \$i/3"
+                            sleep 5
+                        done
+                        
+                        # Push des images avec retry
+                        retry_docker_push \$DOCKER_HUB_USERNAME/lab-platform-backend:${TAG}
+                        retry_docker_push \$DOCKER_HUB_USERNAME/lab-platform-frontend:${TAG}
+                        
                         docker logout
                     """
                 }
