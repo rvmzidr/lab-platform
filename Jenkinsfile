@@ -14,6 +14,40 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/rvmzidr/lab-platform.git'
             }
         }
+        
+        stage('Setup Environment') {
+            steps {
+                script {
+                    echo '⚙️ Création des fichiers d environnement...'
+                    dir("${WORKSPACE_DIR}") {
+                        sh '''
+                            cat > .env << 'EOF'
+BACKEND_PORT=3000
+FRONTEND_PORT=4200
+MYSQL_ROOT_PASSWORD=root
+MYSQL_DATABASE=lab_platform
+MYSQL_USER=labuser
+MYSQL_PASSWORD=labpassword
+DB_HOST=mysql
+DB_PORT=3306
+DB_NAME=lab_platform
+DB_USER=labuser
+DB_PASSWORD=labpassword
+EOF
+
+                            cat > .env.build << 'EOF'
+DOCKER_HUB_USERNAME=ramzi85
+TAG=latest
+BACKEND_PORT=3000
+FRONTEND_PORT=4200
+EOF
+
+                            echo '✅ Fichiers .env créés'
+                        '''
+                    }
+                }
+            }
+        }
 
         stage('Build Docker Images') {
             steps {
@@ -76,11 +110,16 @@ pipeline {
                 script {
                     echo '📊 Initialisation de la base de données...'
                     dir("${WORKSPACE_DIR}") {
-                        sh """
-                            # Attendre que MySQL soit vraiment prêt
+                        sh '''
+                            # Attendre que MySQL soit prêt (jusqu'à 60 secondes)
                             echo '⏳ Vérification de MySQL...'
-                            for i in 1 2 3 4 5 6 7 8 9 10; do
-                                docker exec mysql-db mysql -uroot -proot -e "SELECT 1" && break || sleep 3
+                            for i in {1..20}; do
+                                if docker exec mysql-db mysql -uroot -proot -e "SELECT 1" 2>/dev/null; then
+                                    echo '✅ MySQL est prêt!'
+                                    break
+                                fi
+                                echo "Tentative $i/20..."
+                                sleep 3
                             done
                             
                             # Import de votre base complète
@@ -91,7 +130,7 @@ pipeline {
                             
                             # Vérifier les tables créées
                             docker exec mysql-db mysql -uroot -proot lab_platform -e "SHOW TABLES;"
-                        """
+                        '''
                     }
                 }
             }
