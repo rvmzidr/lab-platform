@@ -96,12 +96,6 @@ pipeline {
                 }
             }
         }
-                            docker exec mysql-db mysql -uroot -proot lab_platform -e "SHOW TABLES;"
-                        """
-                    }
-                }
-            }
-        }
     }
 
     post {
