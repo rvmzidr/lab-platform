@@ -52,8 +52,8 @@ pipeline {
                         docker-compose down || true
                         docker pull ramzi85/lab-platform-backend:${TAG}
                         docker pull ramzi85/lab-platform-frontend:${TAG}
-                        docker-compose up -d
-                        docker-compose ps
+                        docker compose up -d
+                        docker compose ps
                     '''
                 }
             }
