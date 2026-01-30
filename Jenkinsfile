@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_HUB_USERNAME = 'ramzi85'
-        DOCKER_HUB_PASSWORD = credentials('dockercred') // ID متاعك في Jenkins Credentials
+        DOCKER_HUB_PASSWORD = 'ramzi12332100' // ID متاعك في Jenkins Credentials
         TAG = 'latest'
         WORKSPACE_DIR = '/home/jenkins/lab-platform'
     }
