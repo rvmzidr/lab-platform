@@ -115,8 +115,10 @@ EOF
                     echo 'Déploiement local avec docker compose...'
                     dir("${WORKSPACE_DIR}") {
                         sh """
-                            # Arrêter d'éventuels containers existants
-                            docker compose down || true
+                            # Arrêter d'éventuels containers existants et SUPPRIMER LE VOLUME MySQL
+                            docker compose down -v || true
+                            
+                            echo '🗑️  Volume MySQL supprimé - réinitialisation complète'
 
                             # Pull des images Docker Hub
                             docker pull ramzi85/lab-platform-backend:${TAG}
