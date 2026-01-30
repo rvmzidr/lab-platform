@@ -49,7 +49,7 @@ pipeline {
                     echo 'Déploiement local avec docker-compose...'
                     sh '''
                         cd ${WORKSPACE_DIR}
-                        docker-compose down || true
+                        docker compose down || true
                         docker pull ramzi85/lab-platform-backend:${TAG}
                         docker pull ramzi85/lab-platform-frontend:${TAG}
                         docker compose up -d
