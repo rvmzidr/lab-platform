@@ -94,10 +94,6 @@ EOF
                             # Démarrer avec docker compose
                             docker compose up -d
                             
-                            # Attendre que MySQL soit prêt
-                            echo 'Attente du démarrage de MySQL (30 secondes)...'
-                            sleep 30
-                            
                             docker compose ps
                         """
                     }
@@ -110,15 +106,18 @@ EOF
                 script {
                     echo '📊 Initialisation de la base de données...'
                     dir("${WORKSPACE_DIR}") {
-                        sh '''
-                            # Attendre que MySQL soit prêt (jusqu'à 60 secondes)
-                            echo '⏳ Vérification de MySQL...'
-                            for i in {1..20}; do
+                        sh """
+                            # Attendre que MySQL soit prêt (jusqu'à 2 minutes)
+                            echo '⏳ Attente de l initialisation complète de MySQL...'
+                            sleep 45
+                            
+                            echo 'Vérification de la connexion MySQL...'
+                            for i in \$(seq 1 20); do
                                 if docker exec mysql-db mysql -uroot -proot -e "SELECT 1" 2>/dev/null; then
                                     echo '✅ MySQL est prêt!'
                                     break
                                 fi
-                                echo "Tentative $i/20..."
+                                echo "Tentative \$i/20 - attente..."
                                 sleep 3
                             done
                             
@@ -130,7 +129,7 @@ EOF
                             
                             # Vérifier les tables créées
                             docker exec mysql-db mysql -uroot -proot lab_platform -e "SHOW TABLES;"
-                        '''
+                        """
                     }
                 }
             }
