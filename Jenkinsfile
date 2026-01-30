@@ -47,17 +47,17 @@ pipeline {
         stage('Deploy to Local') {
             steps {
                 script {
-                    echo 'Déploiement local avec docker-compose...'
-                    dir("${WORKSPACE_DIR}") { // s'assure d'être dans le dossier cloné
+                    echo 'Déploiement local avec docker compose...'
+                    dir("${WORKSPACE_DIR}") {
                         sh """
                             # Arrêter d'éventuels containers existants
                             docker compose down || true
 
                             # Pull des images Docker Hub
-                            docker pull \$DOCKER_HUB_USERNAME/lab-platform-backend:${TAG}
-                            docker pull \$DOCKER_HUB_USERNAME/lab-platform-frontend:${TAG}
+                            docker pull ramzi85/lab-platform-backend:${TAG}
+                            docker pull ramzi85/lab-platform-frontend:${TAG}
 
-                            # Démarrer avec docker-compose
+                            # Démarrer avec docker compose
                             docker compose up -d
                             docker compose ps
                         """
