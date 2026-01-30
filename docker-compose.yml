@@ -9,12 +9,6 @@ services:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
-      interval: 10s
-      timeout: 5s
-      retries: 15
-      start_period: 40s
 
   backend:
     image: ramzi85/lab-platform-backend:${TAG}
@@ -26,8 +20,7 @@ services:
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     depends_on:
-      mysql:
-        condition: service_healthy
+      - mysql
 
   frontend:
     image: ramzi85/lab-platform-frontend:${TAG}

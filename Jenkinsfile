@@ -61,7 +61,7 @@ pipeline {
                             docker compose up -d
                             
                             # Attendre que MySQL soit prêt
-                            echo '⏳ Attente du démarrage de MySQL...'
+                            echo 'Attente du démarrage de MySQL (30 secondes)...'
                             sleep 30
                             
                             docker compose ps
@@ -77,13 +77,25 @@ pipeline {
                     echo '📊 Initialisation de la base de données...'
                     dir("${WORKSPACE_DIR}") {
                         sh """
-                            # Importer votre base de données complète
+                            # Attendre que MySQL soit vraiment prêt
+                            echo '⏳ Vérification de MySQL...'
+                            for i in 1 2 3 4 5 6 7 8 9 10; do
+                                docker exec mysql-db mysql -uroot -proot -e "SELECT 1" && break || sleep 3
+                            done
+                            
+                            # Import de votre base complète
                             echo '▶️  Import de database-export.sql'
                             docker exec -i mysql-db mysql -uroot -proot < backend/migrations/database-export.sql
                             
                             echo '✅ Base de données importée avec succès!'
                             
-                            # Afficher les tables créées
+                            # Vérifier les tables créées
+                            docker exec mysql-db mysql -uroot -proot lab_platform -e "SHOW TABLES;"
+                        """
+                    }
+                }
+            }
+        }
                             docker exec mysql-db mysql -uroot -proot lab_platform -e "SHOW TABLES;"
                         """
                     }
