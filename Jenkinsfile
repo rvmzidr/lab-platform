@@ -2,14 +2,11 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_USERNAME = 'ramzi85'
-        DOCKER_HUB_PASSWORD = 'ramzi12332100' // ID متاعك في Jenkins Credentials
         TAG = 'latest'
         WORKSPACE_DIR = '/home/jenkins/lab-platform'
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 echo 'Récupération du code depuis GitHub...'
@@ -22,8 +19,8 @@ pipeline {
                 script {
                     echo 'Construction des images Docker...'
                     sh '''
-                        docker build -t ${DOCKER_HUB_USERNAME}/lab-platform-backend:${TAG} ./backend
-                        docker build -t ${DOCKER_HUB_USERNAME}/lab-platform-frontend:${TAG} ./frontend
+                        docker build -t ramzi85/lab-platform-backend:${TAG} ./backend
+                        docker build -t ramzi85/lab-platform-frontend:${TAG} ./frontend
                     '''
                 }
             }
@@ -31,12 +28,15 @@ pipeline {
 
         stage('Push to Docker Hub') {
             steps {
-                script {
-                    echo 'Connexion à Docker Hub et push des images...'
+                withCredentials([usernamePassword(
+                    credentialsId: '8369d43a-51c6-49bd-ae3b-ddbb23a1a4db',
+                    usernameVariable: 'DOCKER_HUB_USERNAME',
+                    passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
+                   
                     sh '''
                         echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
-                        docker push ${DOCKER_HUB_USERNAME}/lab-platform-backend:${TAG}
-                        docker push ${DOCKER_HUB_USERNAME}/lab-platform-frontend:${TAG}
+                        docker push ramzi85/lab-platform-backend:${TAG}
+                        docker push ramzi85/lab-platform-frontend:${TAG}
                         docker logout
                     '''
                 }
@@ -50,27 +50,19 @@ pipeline {
                     sh '''
                         cd ${WORKSPACE_DIR}
                         docker-compose down || true
-                        docker pull ${DOCKER_HUB_USERNAME}/lab-platform-backend:${TAG} || true
-                        docker pull ${DOCKER_HUB_USERNAME}/lab-platform-frontend:${TAG} || true
-                        docker-compose up -d || true
-                        docker-compose ps || true
-
+                        docker pull ramzi85/lab-platform-backend:${TAG}
+                        docker pull ramzi85/lab-platform-frontend:${TAG}
+                        docker-compose up -d
+                        docker-compose ps
                     '''
                 }
             }
         }
-
     }
 
     post {
-        success {
-            echo 'Pipeline exécuté avec succès! ✓'
-        }
-        failure {
-            echo 'Le pipeline a échoué! ✗'
-        }
-        always {
-            sh 'docker system prune -f || true'
-        }
+        success { echo 'Pipeline exécuté avec succès! ✓' }
+        failure { echo 'Le pipeline a échoué! ✗' }
+        always { sh 'docker system prune -f || true' }
     }
 }
